@@ -2,7 +2,8 @@
 #include <vector>
 #include <string>
 #include <limits>
-#include <iomanip> // Naudojama rezultatu formatavimui
+#include <iomanip>
+#include <algorithm> // Reikalinga medianai apskaiciuoti
 
 using std::endl;
 using std::cout;
@@ -29,6 +30,17 @@ double skaiciuotiVidurki(const vector<int>& namuDarbai) {
     return suma / namuDarbai.size();
 }
 
+// Funkcija, kuri skaiciuoja mediana is namu darbu rezultatu
+double skaiciuotiMediana(vector<int> namuDarbai) {
+    std::sort(namuDarbai.begin(), namuDarbai.end());
+    int dydis = namuDarbai.size();
+    if (dydis % 2 == 0) {
+        return (namuDarbai[dydis / 2 - 1] + namuDarbai[dydis / 2]) / 2.0;
+    } else {
+        return namuDarbai[dydis / 2];
+    }
+}
+
 // Funkcija, kuri iveda studento duomenis
 void ivestiStudenta(Studentas &studentas) {
     cout << "Iveskite studento varda: ";
@@ -36,7 +48,6 @@ void ivestiStudenta(Studentas &studentas) {
     cout << "Iveskite studento pavarde: ";
     cin >> studentas.pavarde;
 
-    // Ivedame namu darbu rezultatus ir tikriname, ar buvo ivesta bent viena reiksme
     string input;
     int rezultatas;
     bool bentVienasRezultatas = false;
@@ -46,17 +57,17 @@ void ivestiStudenta(Studentas &studentas) {
 
         if (input == "*") {
             if (bentVienasRezultatas) {
-                break; // Jei buvo ivestas bent vienas rezultatas, baigiame ivesti
+                break;
             } else {
                 cout << "Turite ivesti bent viena namu darbu rezultata!" << endl;
             }
         } else {
             try {
-                rezultatas = std::stoi(input); // Konvertuojame ivesta string i int
+                rezultatas = std::stoi(input);
                 if (rezultatas < 0) {
                     cout << "Klaida! Namu darbu rezultatas negali buti neigiamas. Iveskite teigiama skaiciu: ";
                 } else {
-                    studentas.namuDarbai.push_back(rezultatas); // Pridedame rezultata i vektoriu
+                    studentas.namuDarbai.push_back(rezultatas);
                     bentVienasRezultatas = true;
                 }
             } catch (const std::invalid_argument&) {
@@ -65,7 +76,6 @@ void ivestiStudenta(Studentas &studentas) {
         }
     }
 
-    // Ivedame egzamino rezultata ir tikriname, ar tai yra skaicius nuo 0 iki 10
     cout << "Iveskite egzamino rezultata: ";
     while (!(cin >> studentas.egzaminas) || studentas.egzaminas < 0 || studentas.egzaminas > 10) {
         cin.clear();
@@ -76,13 +86,19 @@ void ivestiStudenta(Studentas &studentas) {
 }
 
 // Funkcija, kuri spausdina studento duomenis kartu su galutiniu balu
-void spausdintiStudenta(const Studentas &studentas) {
-    double vidurkis = skaiciuotiVidurki(studentas.namuDarbai); // Skaiciuojame vidurki
-    double galutinis = 0.4 * vidurkis + 0.6 * studentas.egzaminas; // Skaiciuojame galutini bala
-
-    // Spausdiname studento duomenis su formatuotais stulpeliais
-    cout << std::left << std::setw(12) << studentas.vardas 
-         << std::setw(12) << studentas.pavarde 
+void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
+    double galutinis;
+    if (naudotiVidurki) {
+        double vidurkis = skaiciuotiVidurki(studentas.namuDarbai);
+        galutinis = 0.4 * vidurkis + 0.6 * studentas.egzaminas;
+    } else {
+        double mediana = skaiciuotiMediana(studentas.namuDarbai);
+        galutinis = 0.4 * mediana + 0.6 * studentas.egzaminas;
+    }
+    
+    // Spausdiname studento varda, pavarde ir galutini bala
+    cout << std::left << std::setw(12) << studentas.vardas
+         << std::setw(12) << studentas.pavarde
          << std::fixed << std::setprecision(2) << galutinis << endl;
 }
 
@@ -92,22 +108,26 @@ int main() {
     cin >> studentuSkaicius;
 
     vector<Studentas> studentai(studentuSkaicius);
-
-    // Ivedame studentu duomenis
     for (int i = 0; i < studentuSkaicius; ++i) {
         cout << "Iveskite " << i + 1 << "-ojo studento duomenis:" << endl;
         ivestiStudenta(studentai[i]);
     }
 
-    // Spausdiname rezultatus su antrastemis
-    cout << std::left << std::setw(12) << "Vardas" 
-         << std::setw(12) << "Pavarde" 
-         << "Galutinis (Vid.)" << endl;
-    cout << "———————————————————————————————————-------------------" << endl;
+    // Paklausiame, ar naudoti vidurki ar mediana
+    char pasirinkimas;
+    cout << "Ar norite skaiciuoti galutini bala naudodami vidurki (v) ar mediana (m)? (iveskite v arba m): ";
+    cin >> pasirinkimas;
+    bool naudotiVidurki = (pasirinkimas == 'v');
 
-    // Spausdiname visu studentu duomenis
+    // Spausdiname antrastes
+    cout << std::left << std::setw(12) << "Vardas"
+         << std::setw(12) << "Pavarde"
+         << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
+    cout << "------------------------------------------------------" << endl;
+
+    // Spausdiname studentu rezultatus
     for (const auto& studentas : studentai) {
-        spausdintiStudenta(studentas);
+        spausdintiStudenta(studentas, naudotiVidurki);
     }
 
     return 0;
