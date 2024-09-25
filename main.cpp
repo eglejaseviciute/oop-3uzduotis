@@ -3,7 +3,7 @@
 #include <string>
 #include <limits>
 #include <iomanip>
-#include <algorithm> // Reikalinga medianai apskaiciuoti
+#include <algorithm>
 
 using std::endl;
 using std::cout;
@@ -47,32 +47,37 @@ void ivestiStudenta(Studentas &studentas) {
     cin >> studentas.vardas;
     cout << "Iveskite studento pavarde: ";
     cin >> studentas.pavarde;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     string input;
     int rezultatas;
     bool bentVienasRezultatas = false;
-    cout << "Iveskite namu darbu rezultatus (iveskite *, kai noresite baigti):" << endl;
-    while (true) {
-        cin >> input;
 
-        if (input == "*") {
+    cout << "Iveskite namu darbu rezultatus (du kartus paspauskite ENTER, kad baigtumete):" << endl;
+    
+    while (true) {
+        std::getline(cin, input); // Naudojame getline, kad gautume visą eilutę
+
+        // Patikriname, ar įvesta tuščia eilutė
+        if (input.empty()) {
             if (bentVienasRezultatas) {
-                break;
+                break; // Baigti, jei bent vienas rezultatas buvo įvestas
             } else {
                 cout << "Turite ivesti bent viena namu darbu rezultata!" << endl;
+                continue; // Toliau laukti įvesties
             }
-        } else {
-            try {
-                rezultatas = std::stoi(input);
-                if (rezultatas < 0) {
-                    cout << "Klaida! Namu darbu rezultatas negali buti neigiamas. Iveskite teigiama skaiciu: ";
-                } else {
-                    studentas.namuDarbai.push_back(rezultatas);
-                    bentVienasRezultatas = true;
-                }
-            } catch (const std::invalid_argument&) {
-                cout << "Klaida! Prasome ivesti tinkama skaiciu arba * baigti: ";
+        }
+
+        try {
+            rezultatas = std::stoi(input);
+            if (rezultatas < 0) {
+                cout << "Klaida! Namu darbu rezultatas negali buti neigiamas. Iveskite teigiama skaiciu: ";
+            } else {
+                studentas.namuDarbai.push_back(rezultatas);
+                bentVienasRezultatas = true;
             }
+        } catch (const std::invalid_argument&) {
+            cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
         }
     }
 
@@ -106,6 +111,7 @@ int main() {
     int studentuSkaicius;
     cout << "Kiek studentu norite ivesti? ";
     cin >> studentuSkaicius;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     vector<Studentas> studentai(studentuSkaicius);
     for (int i = 0; i < studentuSkaicius; ++i) {
