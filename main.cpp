@@ -4,6 +4,8 @@
 #include <limits>
 #include <iomanip>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 using std::endl;
 using std::cout;
@@ -41,53 +43,64 @@ double skaiciuotiMediana(vector<int> namuDarbai) {
     }
 }
 
+// Funkcija, kuri generuoja atsitiktinius rezultatus
+void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
+    for (int i = 0; i < namuDarbaiKiekis; ++i) {
+        studentas.namuDarbai.push_back(rand() % 11); // Generuojame atsitiktini rezultata nuo 0 iki 10
+    }
+    studentas.egzaminas = rand() % 11; // Generuojame atsitiktini egzamino rezultata nuo 0 iki 10
+}
+
 // Funkcija, kuri iveda studento duomenis
-void ivestiStudenta(Studentas &studentas) {
+void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis) {
     cout << "Iveskite studento varda: ";
     cin >> studentas.vardas;
     cout << "Iveskite studento pavarde: ";
     cin >> studentas.pavarde;
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    string input;
-    int rezultatas;
-    bool bentVienasRezultatas = false;
+    if (atsitiktiniai) {
+        generuotiRezultatus(studentas, namuDarbaiKiekis);
+    } else {
+        string input;
+        int rezultatas;
+        bool bentVienasRezultatas = false;
 
-    cout << "Iveskite namu darbu rezultatus (du kartus paspauskite ENTER, kad baigtumete):" << endl;
-    
-    while (true) {
-        std::getline(cin, input); // Naudojame getline, kad gautume visą eilutę
+        cout << "Iveskite namu darbu rezultatus (du kartus paspauskite ENTER, kai noresite baigti):" << endl;
 
-        // Patikriname, ar įvesta tuščia eilutė
-        if (input.empty()) {
-            if (bentVienasRezultatas) {
-                break; // Baigti, jei bent vienas rezultatas buvo įvestas
-            } else {
-                cout << "Turite ivesti bent viena namu darbu rezultata!" << endl;
-                continue; // Toliau laukti įvesties
+        while (true) {
+            std::getline(cin, input);
+
+            if (input.empty()) {
+                if (bentVienasRezultatas) {
+                    break;
+                } else {
+                    cout << "Turite ivesti bent viena namu darbu rezultata!" << endl;
+                    continue;
+                }
+            }
+
+            try {
+                rezultatas = std::stoi(input);
+                if (rezultatas < 0 || rezultatas > 10) {
+                    cout << "Klaida! Namu darbu rezultatas turi buti tarp 0 ir 10. Iveskite teigiama skaiciu: ";
+                } else {
+                    studentas.namuDarbai.push_back(rezultatas);
+                    bentVienasRezultatas = true;
+                }
+            } catch (const std::invalid_argument&) {
+                cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
             }
         }
 
-        try {
-            rezultatas = std::stoi(input);
-            if (rezultatas < 0) {
-                cout << "Klaida! Namu darbu rezultatas negali buti neigiamas. Iveskite teigiama skaiciu: ";
-            } else {
-                studentas.namuDarbai.push_back(rezultatas);
-                bentVienasRezultatas = true;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
+        cout << "Iveskite egzamino rezultata: ";
+        while (!(cin >> studentas.egzaminas) || studentas.egzaminas < 0 || studentas.egzaminas > 10) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Klaida! Prasome ivesti tinkama egzamino rezultata (0-10): ";
         }
+        cout << endl;
     }
-
-    cout << "Iveskite egzamino rezultata: ";
-    while (!(cin >> studentas.egzaminas) || studentas.egzaminas < 0 || studentas.egzaminas > 10) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Klaida! Prasome ivesti tinkama egzamino rezultata (0-10): ";
-    }
-    cout << endl;
 }
 
 // Funkcija, kuri spausdina studento duomenis kartu su galutiniu balu
@@ -100,14 +113,15 @@ void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
         double mediana = skaiciuotiMediana(studentas.namuDarbai);
         galutinis = 0.4 * mediana + 0.6 * studentas.egzaminas;
     }
-    
-    // Spausdiname studento varda, pavarde ir galutini bala
+
     cout << std::left << std::setw(12) << studentas.vardas
          << std::setw(12) << studentas.pavarde
          << std::fixed << std::setprecision(2) << galutinis << endl;
 }
 
 int main() {
+    srand(static_cast<unsigned>(time(0))); // Atsitiktiniu skaičiu generatorius
+
     int studentuSkaicius;
     cout << "Kiek studentu norite ivesti? ";
     cin >> studentuSkaicius;
@@ -115,23 +129,36 @@ int main() {
 
     vector<Studentas> studentai(studentuSkaicius);
     for (int i = 0; i < studentuSkaicius; ++i) {
+        cout << endl;
         cout << "Iveskite " << i + 1 << "-ojo studento duomenis:" << endl;
-        ivestiStudenta(studentai[i]);
+        char pasirinkimas;
+        cout << "Ar norite generuoti atsitiktinius balus (t - TAIP, n - NE)? ";
+        cin >> pasirinkimas;
+        bool atsitiktiniai = (pasirinkimas == 't');
+
+        int namuDarbaiKiekis = 0;
+        if (atsitiktiniai) {
+            cout << "Kiek namu darbu rezultatu norite generuoti (nuo 1 iki 10)? ";
+            cin >> namuDarbaiKiekis;
+            while (namuDarbaiKiekis < 1 || namuDarbaiKiekis > 10) {
+                cout << "Klaida! Iveskite skaiciu tarp 1 ir 10: ";
+                cin >> namuDarbaiKiekis;
+            }
+        }
+
+        ivestiStudenta(studentai[i], atsitiktiniai, namuDarbaiKiekis);
     }
 
-    // Paklausiame, ar naudoti vidurki ar mediana
     char pasirinkimas;
     cout << "Ar norite skaiciuoti galutini bala naudodami vidurki (v) ar mediana (m)? (iveskite v arba m): ";
     cin >> pasirinkimas;
     bool naudotiVidurki = (pasirinkimas == 'v');
 
-    // Spausdiname antrastes
     cout << std::left << std::setw(12) << "Vardas"
          << std::setw(12) << "Pavarde"
          << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
     cout << "------------------------------------------------------" << endl;
 
-    // Spausdiname studentu rezultatus
     for (const auto& studentas : studentai) {
         spausdintiStudenta(studentas, naudotiVidurki);
     }
