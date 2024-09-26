@@ -8,6 +8,7 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <cctype>
 
 using std::endl;
 using std::cout;
@@ -70,6 +71,7 @@ void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
 }
 
 
+
 // Funkcija, kuri iveda studento duomenis
 void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis) {
     cout << "Iveskite studento varda: ";
@@ -109,6 +111,8 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
                 }
             } catch (const std::invalid_argument&) {
                 cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
+            } catch (const std::out_of_range&) {
+                cout << "Klaida! Skaičius per didelis. Bandykite dar kartą: ";
             }
         }
 
@@ -127,6 +131,8 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
                     }
                 } catch (const std::invalid_argument&) {
                     cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
+                } catch (const std::out_of_range&) {
+                    cout << "Klaida! Skaičius per didelis. Bandykite dar kartą: ";
                 }
             }
         }
@@ -152,43 +158,95 @@ void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
 }
 
 
-// Funkcija, kuri nuskaito studentu duomenis is failo
-void nuskaitytiDuomenisIsFailo(const string &failoPavadinimas, vector<Studentas> &studentai) {
-    std::ifstream failas(failoPavadinimas);
-    if (!failas) {
-        cout << "Klaida! Nepavyko atidaryti failo." << endl;
-        return;
-    }
-
-    // Praleidziame pirma eilute (antraste)
-    string line;
-    std::getline(failas, line);
-
-    while (std::getline(failas, line)) {
-        Studentas studentas;
-        std::stringstream ss(line);  
-
-        ss >> studentas.vardas >> studentas.pavarde;
-
-        // Isvalome vektoriu, kad butu svarus
-        studentas.rezultatai.namuDarbai.clear(); 
-
-        int nd;
-        while (ss >> nd) {
-            // Paskutine reiksme turetu buti egzamino rezultatas
-            studentas.rezultatai.namuDarbai.push_back(nd);
+void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &studentai) {
+    while (true) { // Ciklas, kad vartotojas galėtų pakartotinai įvesti failo pavadinimą
+        std::ifstream failas(failoPavadinimas);
+        if (!failas) {
+            cout << "Klaida! Nepavyko atidaryti failo: " << failoPavadinimas << endl;
+            cout << "Prašome įvesti teisingą failo pavadinimą: ";
+            cin >> failoPavadinimas; // Vartotojas gali įvesti naują failo pavadinimą
+            continue; // Grįžtame prie failo atidarymo
         }
 
-        // Patikriname, ar yra bent vienas namu darbas ir ar yra teisingas egzamino rezultatas
-        if (!studentas.rezultatai.namuDarbai.empty()) {
-            studentas.rezultatai.egzaminas = studentas.rezultatai.namuDarbai.back(); // Paskutine reiksme - egzamino rezultatas
-            studentas.rezultatai.namuDarbai.pop_back(); // Pasalinti egzamino rezultata is namu darbu
-            studentai.push_back(studentas);
-        }
-    }
+        // Praleidžiame pirmą eilutę (antraštę)
+        string line;
+        std::getline(failas, line);
 
-    failas.close();
+        while (std::getline(failas, line)) {
+            cout << "Nuskaityta eilutė: " << line << endl; // Debug
+            Studentas studentas;
+            std::stringstream ss(line);
+
+            // Nuskaitome vardą ir pavardę
+            ss >> studentas.vardas >> studentas.pavarde;
+
+            // Išvalome vektorių
+            studentas.rezultatai.namuDarbai.clear();
+
+            // Nuskaitome namų darbus
+            string ndInput;
+            int nd;
+            int ndIndex = 0; // Indeksas, kuriame saugosime namų darbo poziciją
+
+            while (ss >> ndInput) {
+                try {
+                    nd = std::stoi(ndInput);
+                    if (nd < 0 || nd > 10) {
+                        throw std::invalid_argument("Neteisingas diapazonas");
+                    }
+                    studentas.rezultatai.namuDarbai.push_back(nd);
+                    ndIndex++; // Padidiname indeksą tik sėkmingai nuskaitytam namų darbui
+                } catch (const std::exception&) {
+                    // Klaida su namų darbo rezultatu
+                    cout << "Klaida! Netinkamas simbolis ar skaicius studentui(-ei): " 
+                         << studentas.vardas << " " << studentas.pavarde 
+                         << " (klaida: '" 
+                         << ndInput << "')." << endl;
+
+                    // Prašome vartotojo įvesti tinkamą namų darbo įvestį
+                    cout << "Iveskite tinkama rezultata (skaicius nuo 0 iki 10) studentui(-ei): "
+                         << studentas.vardas << " " << studentas.pavarde << ": ";
+
+                    while (true) {
+                        cin >> nd;
+                        if (cin.fail() || nd < 0 || nd > 10) {
+                            cout << "Klaida! Iveskite skaiciu tarp 0 ir 10: ";
+                            cin.clear();
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        } else {
+                            studentas.rezultatai.namuDarbai.push_back(nd);
+                            break; // Išeiname iš ciklo
+                        }
+                    }
+                }
+            }
+
+            // Dabar paskutinis rezultatas visada bus egzamino rezultatas
+            if (!studentas.rezultatai.namuDarbai.empty()) {
+                // Nuskaitome paskutinį namų darbą kaip egzamino rezultatą
+                int egzaminas = studentas.rezultatai.namuDarbai.back();
+                studentas.rezultatai.namuDarbai.pop_back(); // Pašaliname paskutinį elementą iš namų darbų
+
+                // Tikriname, ar egzaminas tinkamas
+                if (egzaminas < 0 || egzaminas > 10) {
+                    cout << "Klaida! Egzamino rezultatas studentui " << studentas.vardas 
+                         << " " << studentas.pavarde << " už neteisingą diapazoną." << endl;
+                } else {
+                    studentas.rezultatai.egzaminas = egzaminas;
+                }
+            }
+
+            // Pridedame studentą į sąrašą
+            if (!studentas.rezultatai.namuDarbai.empty()) {
+                studentai.push_back(studentas);
+            }
+        }
+
+        failas.close();
+        break; // Jei failas sėkmingai perskaitytas, išeiname iš ciklo
+    }
 }
+
 
 
 // Lyginimo funkcija, kuri naudoja varda ir pavarde rusiavimui
@@ -200,72 +258,108 @@ bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
 }
 
 
+
 int main() {
-    srand(static_cast<unsigned>(time(0))); // Atsitiktiniu skaiciu generatorius
+    srand(static_cast<unsigned>(time(0))); // Atsitiktinių skaičių generatorius
 
     char pasirinkimas;
-    cout << "Ar norite nuskaityti duomenis is failo (f) ar juos ivesti patys (i)? (iveskite f arba i): ";
-    cin >> pasirinkimas;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Isvalykite ivesties srauta
+    while (true) {
+        cout << "Ar norite nuskaityti duomenis is failo (f) ar juos ivesti patys (i)? (iveskite f arba i): ";
+        cin >> pasirinkimas;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Išvalykite įvesties srautą
+
+        if (pasirinkimas == 'f' || pasirinkimas == 'i') {
+            break; // Išeiname iš ciklo, jei pasirinkimas tinkamas
+        } else {
+            cout << "Klaida! Prašome įvesti 'f' arba 'i'!" << endl;
+        }
+    }
 
     vector<Studentas> studentai;
 
-    if (pasirinkimas == 'f') {
-        // Nuskaitymas is failo
-        string failoPavadinimas;
-        cout << "Iveskite failo pavadinima (pvz., studentai.txt): ";
-        getline(cin, failoPavadinimas);
-        nuskaitytiDuomenisIsFailo(failoPavadinimas, studentai); // Sioje funkcijoje nuskaitomi duomenys is failo
-    } else if (pasirinkimas == 'i') {
-        // Ivedimas rankiniu budu
-        int studentuSkaicius;
-        cout << "Kiek studentu norite ivesti? ";
-        cin >> studentuSkaicius;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Isvalykite srauta po skaiciaus ivedimo
-
-        for (int i = 0; i < studentuSkaicius; ++i) {
-            cout << endl;
-            cout << "Iveskite " << i + 1 << "-ojo studento duomenis:" << endl;
-
-            // Ar generuoti atsitiktinius rezultatus?
-            char atsitiktiniuPasirinkimas;
-            cout << "Ar norite generuoti atsitiktinius balus (t - TAIP, n - NE)? ";
-            cin >> atsitiktiniuPasirinkimas;
-            bool atsitiktiniai = (atsitiktiniuPasirinkimas == 't');
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Isvalykite srauta po pasirinkimo
-
-            int namuDarbaiKiekis = 0;
-            if (atsitiktiniai) {
-            // Jei generuojami atsitiktiniai balai, reikia nurodyti kiek namu darbu
-                cout << "Kiek namu darbu rezultatu norite generuoti (nuo 1 iki 10)? ";
-                while (true) {
-                    cin >> namuDarbaiKiekis;
-                    if (cin.fail() || namuDarbaiKiekis < 1 || namuDarbaiKiekis > 10) {
-                        cout << "Klaida! Iveskite skaiciu tarp 1 ir 10: ";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                     } else {
-                        break;
-                    }
+    try {
+        if (pasirinkimas == 'f') {
+            // Nuskaitymas is failo
+            string failoPavadinimas;
+            cout << "Iveskite failo pavadinima (pvz., studentai.txt): ";
+            getline(cin, failoPavadinimas);
+            nuskaitytiDuomenisIsFailo(failoPavadinimas, studentai); // Sioje funkcijoje nuskaitomi duomenys is failo
+        } else if (pasirinkimas == 'i') {
+            // Ivedimas rankiniu budu
+            int studentuSkaicius;
+            while (true) { // Ciklas, skirtas validuoti studentu skaiciu
+                cout << "Kiek studentu norite ivesti? ";
+                cin >> studentuSkaicius;
+                if (cin.fail() || studentuSkaicius <= 0) {
+                    cout << "Klaida! Prasome ivesti teigiama skaiciu." << endl;
+                    cin.clear(); // Išvalome klaidos vėliavą
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Išvalykite srautą
+                } else {
+                    break; // Išeiname iš ciklo, kai gautas tinkamas įvestis
                 }
             }
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Išvalykite srautą po skaičiaus ivedimo
 
+            for (int i = 0; i < studentuSkaicius; ++i) {
+                cout << endl;
+                cout << "Iveskite " << i + 1 << "-ojo studento duomenis:" << endl;
 
-            // Ivedame studento duomenis
-            Studentas studentas;
-            ivestiStudenta(studentas, atsitiktiniai, namuDarbaiKiekis);
-            studentai.push_back(studentas);
+                // Ar generuoti atsitiktinius rezultatus?
+                char atsitiktiniuPasirinkimas;
+                while (true) { // Ciklas, skirtas validuoti atsitiktiniu pasirinkima
+                    cout << "Ar norite generuoti atsitiktinius balus (t - TAIP, n - NE)? ";
+                    string ivestis; // Naudojame string, kad galėtume patikrinti įvesties ilgį
+                    cin >> ivestis;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Išvalykite srautą po pasirinkimo
+
+                    // Tikriname, ar įvestis yra vieno simbolio ilgio ir ar tai 't' arba 'n'
+                    if (ivestis.length() == 1 && (ivestis[0] == 't' || ivestis[0] == 'n')) {
+                        atsitiktiniuPasirinkimas = ivestis[0]; // Priskiriame teisingą pasirinkimą
+                        break; // Išeiname iš ciklo, jei pasirinkimas teisingas
+                    } else {
+                        cout << "Klaida! Prašome įvesti tik vieną simbolį: 't' arba 'n'!" << endl;
+                    }
+                }
+
+                bool atsitiktiniai = (atsitiktiniuPasirinkimas == 't');
+                int namuDarbaiKiekis = 0;
+                if (atsitiktiniai) {
+                    // Jei generuojami atsitiktiniai balai, reikia nurodyti kiek namu darbu
+                    cout << "Kiek namu darbu rezultatu norite generuoti? ";
+                    while (true) {
+                        cin >> namuDarbaiKiekis;
+                        if (cin.fail() || namuDarbaiKiekis < 1) { // Šaliname 10 viršutinę ribą
+                            cout << "Klaida! Iveskite teigiama skaiciu: ";
+                            cin.clear();
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                // Ivedame studento duomenis
+                Studentas studentas;
+                ivestiStudenta(studentas, atsitiktiniai, namuDarbaiKiekis);
+                studentai.push_back(studentas);
+            }
         }
-    } else {
-        // Klaida, jei pasirinkimas neteisingas
-        cout << "Klaida! Pasirinkite teisinga pasirinkima." << endl;
-        return 1;
+    } catch (const std::exception &e) {
+        cout << e.what() << endl;
     }
 
     // Galutiniu balu skaiciavimas pagal vidurki arba mediana
     char metodoPasirinkimas;
-    cout << "Ar norite skaiciuoti galutini bala pagal vidurki (v) ar mediana (m)? (iveskite v arba m): ";
-    cin >> metodoPasirinkimas;
+    while (true) {
+        cout << "Ar norite skaiciuoti galutini bala pagal vidurki (v) ar mediana (m)? (iveskite v arba m): ";
+        cin >> metodoPasirinkimas;
+
+        if (metodoPasirinkimas == 'v' || metodoPasirinkimas == 'm') {
+            break; // Išeiname iš ciklo, jei pasirinkimas tinkamas
+        } else {
+            cout << "Klaida! Prašome įvesti 'v' arba 'm'!" << endl;
+        }
+    }
 
     bool naudotiVidurki = (metodoPasirinkimas == 'v');
 
