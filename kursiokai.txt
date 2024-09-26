@@ -1,4 +1,6 @@
-Vardas                   Pavardė                    ND1       ND2       ND3       ND4       ND5       ND6      Egzaminas
-Vardas1                  Pavardė1                   10        9         10        10        8         10        10
-Vardas2                  Pavardė2                   7         10        8         5         9         3         10
-Vardas3                  Pavardė3                   6         1         6         7         9         4         8
+Vardas                   Pavarde                    ND1       ND2       ND3       ND4       ND5      Egz.
+Arvydas                  Sabonis                     8         9        10         6        10         9
+Rimas                    Kurtinaitis                 7        10         8         5         4         6
+Jonas                    Paulaitis                   6         5         8         7         9         8
+Inga                     Mazeikaite                  6         5         8         7         9         8
+Jonas                    Jonaitis                    1         2         3         4         5         6
