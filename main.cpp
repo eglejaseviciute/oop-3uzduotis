@@ -142,7 +142,7 @@ void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
 
     cout << left << setw(18) << studentas.vardas
          << setw(18) << studentas.pavarde
-         << " " << left << setw(15) << fixed << setprecision(2) << galutinis << endl;
+         << left << setw(15) << fixed << setprecision(2) << galutinis << endl;
 }
 
 
@@ -182,6 +182,15 @@ void nuskaitytiDuomenisIsFailo(const string &failoPavadinimas, vector<Studentas>
     }
 
     failas.close();
+}
+
+
+// Lyginimo funkcija, kuri naudoja varda ir pavarde rusiavimui
+bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
+    if (a.vardas == b.vardas) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
 }
 
 
@@ -253,6 +262,9 @@ int main() {
     cin >> metodoPasirinkimas;
 
     bool naudotiVidurki = (metodoPasirinkimas == 'v');
+
+    // Surusiuojame studentus pagal vardus
+    std::sort(studentai.begin(), studentai.end(), lygintiPagalVarda);
 
     // Spausdiname antraste
     cout << endl;
