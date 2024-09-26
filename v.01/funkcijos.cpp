@@ -27,17 +27,25 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, std::vector<Studentas> 
         ifstream failas(failoPavadinimas);
         if (!failas) {
             cout << "Klaida! Nepavyko atidaryti failo: " << failoPavadinimas << endl;
-            cout << "Prašome įvesti teisingą failo pavadinimą: ";
+            cout << "Prasome ivesti teisinga failo pavadinima: ";
             cin >> failoPavadinimas;
             continue;
         }
 
         // Praleidziame pirma eilute (antraste)
         string line;
-        std::getline(failas, line);
+        if (!getline(failas, line)) {
+            cout << "Klaida! Failas yra tuscias arba neatitinka strukturos." << endl;
+            cout << "Prasome ivesti kita failo pavadinima: ";
+            cin >> failoPavadinimas;
+            continue;
+        }
 
-        while (std::getline(failas, line)) {
-            cout << "Nuskaityta eilutė: " << line << endl;
+        bool arYraDuomenu = false;
+
+        while (getline(failas, line)) {
+            arYraDuomenu = true; // Nustatome, kad radome bent viena duomenu eilute
+            cout << "Nuskaityta eilute: " << line << endl;
             Studentas studentas;
             stringstream ss(line);
 
@@ -82,16 +90,15 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, std::vector<Studentas> 
                 }
             }
 
-    
             if (!studentas.rezultatai.namuDarbai.empty()) {
                 // Nuskaitome paskutini namu darba kaip egzamino rezultata
                 int egzaminas = studentas.rezultatai.namuDarbai.back();
-                studentas.rezultatai.namuDarbai.pop_back(); // Pasaliname paskutini elementa is namu darbu
+                studentas.rezultatai.namuDarbai.pop_back();
 
                 // Tikriname, ar egzaminas tinkamas
                 if (egzaminas < 0 || egzaminas > 10) {
                     cout << "Klaida! Egzamino rezultatas studentui " << studentas.vardas 
-                         << " " << studentas.pavarde << " už neteisingą diapazoną." << endl;
+                         << " " << studentas.pavarde << " už neteisinga diapazona." << endl;
                 } else {
                     studentas.rezultatai.egzaminas = egzaminas;
                 }
@@ -103,10 +110,19 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, std::vector<Studentas> 
             }
         }
 
+        if (!arYraDuomenu) {
+            // Jei failas turi antraste, bet nera studentu duomenu
+            cout << "Klaida! Failas neatitinka strukturos arba yra tuscias." << endl;
+            cout << "Prasome ivesti kita failo pavadinima: ";
+            cin >> failoPavadinimas;
+            continue;
+        }
+
         failas.close();
         break;
     }
 }
+
 
 
 bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
