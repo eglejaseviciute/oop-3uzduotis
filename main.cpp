@@ -24,12 +24,18 @@ using std::fixed;
 using std::getline;
 
 
+// Struktura, skirta namu darbu ir egzamino rezultatams saugoti
+struct Rezultatai {
+    vector<int> namuDarbai;
+    int egzaminas;
+};
+
+
 // Struktura, skirta studento duomenims saugoti
 struct Studentas {
     string vardas;
     string pavarde;
-    vector<int> namuDarbai;
-    int egzaminas;
+    Rezultatai rezultatai; // Naudojame Rezultatai struktura
 };
 
 
@@ -58,9 +64,9 @@ double skaiciuotiMediana(vector<int> namuDarbai) {
 // Funkcija, kuri generuoja atsitiktinius rezultatus
 void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
     for (int i = 0; i < namuDarbaiKiekis; ++i) {
-        studentas.namuDarbai.push_back(rand() % 11); // Generuojame atsitiktini namu darbu rezultatus nuo 0 iki 10
+        studentas.rezultatai.namuDarbai.push_back(rand() % 11); // Generuojame atsitiktini namu darbu rezultatus nuo 0 iki 10
     }
-    studentas.egzaminas = rand() % 11; // Generuojame atsitiktini egzamino rezultata nuo 0 iki 10
+    studentas.rezultatai.egzaminas = rand() % 11; // Generuojame atsitiktini egzamino rezultata nuo 0 iki 10
 }
 
 
@@ -98,7 +104,7 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
                 if (rezultatas < 0 || rezultatas > 10) {
                     cout << "Klaida! Namu darbu rezultatas turi buti tarp 0 ir 10. Iveskite teigiama skaiciu: ";
                 } else {
-                    studentas.namuDarbai.push_back(rezultatas);
+                    studentas.rezultatai.namuDarbai.push_back(rezultatas);
                     bentVienasRezultatas = true;
                 }
             } catch (const std::invalid_argument&) {
@@ -113,8 +119,8 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
                 cout << "Klaida! Prasome ivesti egzamino rezultata: ";
             } else {
                 try {
-                    studentas.egzaminas = std::stoi(input);
-                    if (studentas.egzaminas < 0 || studentas.egzaminas > 10) {
+                    studentas.rezultatai.egzaminas = std::stoi(input);
+                    if (studentas.rezultatai.egzaminas < 0 || studentas.rezultatai.egzaminas > 10) {
                         cout << "Klaida! Egzamino rezultatas turi buti tarp 0 ir 10. Iveskite tinkama skaiciu: ";
                     } else {
                         break;
@@ -133,11 +139,11 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
 void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
     double galutinis;
     if (naudotiVidurki) {
-        double vidurkis = skaiciuotiVidurki(studentas.namuDarbai);
-        galutinis = 0.4 * vidurkis + 0.6 * studentas.egzaminas;
+        double vidurkis = skaiciuotiVidurki(studentas.rezultatai.namuDarbai);
+        galutinis = 0.4 * vidurkis + 0.6 * studentas.rezultatai.egzaminas;
     } else {
-        double mediana = skaiciuotiMediana(studentas.namuDarbai);
-        galutinis = 0.4 * mediana + 0.6 * studentas.egzaminas;
+        double mediana = skaiciuotiMediana(studentas.rezultatai.namuDarbai);
+        galutinis = 0.4 * mediana + 0.6 * studentas.rezultatai.egzaminas;
     }
 
     cout << left << setw(18) << studentas.vardas
@@ -165,18 +171,18 @@ void nuskaitytiDuomenisIsFailo(const string &failoPavadinimas, vector<Studentas>
         ss >> studentas.vardas >> studentas.pavarde;
 
         // Isvalome vektoriu, kad butu svarus
-        studentas.namuDarbai.clear(); 
+        studentas.rezultatai.namuDarbai.clear(); 
 
         int nd;
         while (ss >> nd) {
             // Paskutine reiksme turetu buti egzamino rezultatas
-            studentas.namuDarbai.push_back(nd);
+            studentas.rezultatai.namuDarbai.push_back(nd);
         }
 
         // Patikriname, ar yra bent vienas namu darbas ir ar yra teisingas egzamino rezultatas
-        if (!studentas.namuDarbai.empty()) {
-            studentas.egzaminas = studentas.namuDarbai.back(); // Paskutine reiksme - egzamino rezultatas
-            studentas.namuDarbai.pop_back(); // Pasalinti egzamino rezultata is namu darbu
+        if (!studentas.rezultatai.namuDarbai.empty()) {
+            studentas.rezultatai.egzaminas = studentas.rezultatai.namuDarbai.back(); // Paskutine reiksme - egzamino rezultatas
+            studentas.rezultatai.namuDarbai.pop_back(); // Pasalinti egzamino rezultata is namu darbu
             studentai.push_back(studentas);
         }
     }
