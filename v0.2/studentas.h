@@ -2,8 +2,9 @@
 #define STUDENTAS_H
 
 
-#include "rezultatai.h"
 #include "myLib.h"
+#include "rezultatai.h"
+
 
 struct Studentas {
     string vardas;
@@ -11,8 +12,13 @@ struct Studentas {
     Rezultatai rezultatai;
 };
 
+
 void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis);
+void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis);
+double skaiciuotiGalutiniBala(const Studentas &studentas, bool naudotiVidurki);
 void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki);
-bool lygintiPagalVarda(const Studentas &a, const Studentas &b);
+void rusiuotiStudentus(const vector<Studentas> &studentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, bool naudotiVidurki);
+void rasytiStudentusIFaila(const vector<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki);
+
 
 #endif // STUDENTAS_H
