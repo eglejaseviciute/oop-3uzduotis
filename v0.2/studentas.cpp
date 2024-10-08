@@ -1,5 +1,4 @@
 #include "studentas.h"
-#include "myLib.h"
 #include "funkcijos.h"
 
 
@@ -71,25 +70,59 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
 }
 
 
-void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
-    double galutinis;
-    if (naudotiVidurki) {
-        double vidurkis = skaiciuotiVidurki(studentas.rezultatai.namuDarbai);
-        galutinis = 0.4 * vidurkis + 0.6 * studentas.rezultatai.egzaminas;
-    } else {
-        double mediana = skaiciuotiMediana(studentas.rezultatai.namuDarbai);
-        galutinis = 0.4 * mediana + 0.6 * studentas.rezultatai.egzaminas;
+void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
+    for (int i = 0; i < namuDarbaiKiekis; ++i) {
+        studentas.rezultatai.namuDarbai.push_back(rand() % 11);
     }
-
-    cout << left << setw(18) << studentas.vardas
-         << setw(18) << studentas.pavarde
-         << left << setw(15) << fixed << setprecision(2) << galutinis << endl;
+    studentas.rezultatai.egzaminas = rand() % 11;
 }
 
 
-bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
-    if (a.vardas == b.vardas) {
-        return a.pavarde < b.pavarde;
+double skaiciuotiGalutiniBala(const Studentas &studentas, bool naudotiVidurki) {
+    double namuDarbuRezultatas = naudotiVidurki ? 
+        skaiciuotiVidurki(studentas.rezultatai.namuDarbai) : 
+        skaiciuotiMediana(studentas.rezultatai.namuDarbai);
+    return 0.4 * namuDarbuRezultatas + 0.6 * studentas.rezultatai.egzaminas;
+}
+
+
+void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
+    double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
+
+    cout << std::left << std::setw(18) << studentas.vardas
+         << std::setw(18) << studentas.pavarde
+         << std::left << std::setw(15) << std::fixed << std::setprecision(2) << galutinis << endl;
+}
+
+
+void rusiuotiStudentus(const vector<Studentas> &studentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, bool naudotiVidurki) {
+    for (const auto &studentas : studentai) {
+        double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
+        if (galutinis < 5.0) {
+            vargsiukai.push_back(studentas);
+        } else {
+            galvociai.push_back(studentas);
+        }
     }
-    return a.vardas < b.vardas;
+}
+
+
+void rasytiStudentusIFaila(const vector<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki) {
+    std::ofstream failas(failoPavadinimas);
+    if (!failas) {
+        throw std::runtime_error("Nepavyko atidaryti failo: " + failoPavadinimas);
+    }
+
+    failas << left << setw(18) << "Vardas" << setw(18) << "Pavarde" 
+           << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
+    failas << string(60, '-') << endl;
+
+    for (const auto &studentas : studentai) {
+        double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
+        failas << left << setw(18) << studentas.vardas
+               << setw(18) << studentas.pavarde
+               << fixed << setprecision(2) << galutinis << endl;
+    }
+
+    failas.close();
 }
