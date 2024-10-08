@@ -119,13 +119,11 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &stud
 }
 
 
-bool lygintiPagalGalutiniBalaAscending(const Studentas &a, const Studentas &b) {
-    return skaiciuotiGalutiniBala(a, true) < skaiciuotiGalutiniBala(b, true);
-}
-
-
-bool lygintiPagalGalutiniBalaDescending(const Studentas &a, const Studentas &b) {
-    return skaiciuotiGalutiniBala(a, true) > skaiciuotiGalutiniBala(b, true);
+double skaiciuotiGalutiniBala(const Studentas &studentas, bool naudotiVidurki) {
+    double namuDarbuRezultatas = naudotiVidurki ? 
+        skaiciuotiVidurki(studentas.rezultatai.namuDarbai) : 
+        skaiciuotiMediana(studentas.rezultatai.namuDarbai);
+    return 0.4 * namuDarbuRezultatas + 0.6 * studentas.rezultatai.egzaminas;
 }
 
 
@@ -144,14 +142,6 @@ bool lygintiPagalVardaIrPavarde(const Studentas &a, const Studentas &b) {
 }
 
 
-double skaiciuotiGalutiniBala(const Studentas &studentas, bool naudotiVidurki) {
-    double namuDarbuRezultatas = naudotiVidurki ? 
-        skaiciuotiVidurki(studentas.rezultatai.namuDarbai) : 
-        skaiciuotiMediana(studentas.rezultatai.namuDarbai);
-    return 0.4 * namuDarbuRezultatas + 0.6 * studentas.rezultatai.egzaminas;
-}
-
-
 void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &filePrefix) {
     std::ofstream failas(filePrefix + std::to_string(studentuKiekis) + ".txt");
     if (!failas) {
@@ -159,7 +149,6 @@ void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &fil
         return;
     }
 
-    
     failas << left << setw(20) << "Vardas" << setw(20) << "Pavarde";
     for (int i = 1; i <= namuDarbaiKiekis; ++i) {
         failas << "ND" << setw(8) << i;
@@ -182,6 +171,7 @@ void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &fil
 }
 
 
+
 void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
     cout << left << setw(18) << "Vardas"
          << setw(18) << "Pavarde"
@@ -193,5 +183,105 @@ void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
         cout << left << setw(18) << studentas.vardas
              << setw(18) << studentas.pavarde
              << fixed << setprecision(2) << galutinis << endl;
+    }
+}
+
+
+struct SortByFinalScoreAsc {
+    bool naudotiVidurki;
+    SortByFinalScoreAsc(bool useAverage) : naudotiVidurki(useAverage) {}
+    bool operator()(const Studentas &a, const Studentas &b) const {
+        return skaiciuotiGalutiniBala(a, naudotiVidurki) < skaiciuotiGalutiniBala(b, naudotiVidurki);
+    }
+};
+
+
+struct SortByFinalScoreDesc {
+    bool naudotiVidurki;
+    SortByFinalScoreDesc(bool useAverage) : naudotiVidurki(useAverage) {}
+    bool operator()(const Studentas &a, const Studentas &b) const {
+        return skaiciuotiGalutiniBala(a, naudotiVidurki) > skaiciuotiGalutiniBala(b, naudotiVidurki);
+    }
+};
+
+void procesarArchivosBucle() {
+    string failoPavadinimas;
+    char continueProcessing = 'y';
+
+    while (continueProcessing == 'y' || continueProcessing == 'Y') {
+        vector<Studentas> studentai;
+
+        cout << "Iveskite failo pavadinima (pvz., studentai.txt): ";
+        getline(cin, failoPavadinimas);
+        nuskaitytiDuomenisIsFailo(failoPavadinimas, studentai);
+
+       
+        char metodoPasirinkimas;
+        while (true) {
+            cout << "Ar norite skaiciuoti galutini bala pagal vidurki (v) ar mediana (m)? (iveskite v arba m): ";
+            cin >> metodoPasirinkimas;
+
+            if (metodoPasirinkimas == 'v' || metodoPasirinkimas == 'm') {
+                break; 
+            } else {
+                cout << "Klaida! Prasome ivesti 'v' arba 'm'!" << endl;
+            }
+        }
+
+        bool naudotiVidurki = (metodoPasirinkimas == 'v');
+
+        
+        char outputPasirinkimas;
+        while (true) {
+            cout << "Ar norite matyti rezultatus ekrane (e) ar surusiuosti studentus i dvi kategorijas ir irasyti i failus (f)? (iveskite e arba f): ";
+            cin >> outputPasirinkimas;
+
+            if (outputPasirinkimas == 'e' || outputPasirinkimas == 'f') {
+                break;
+            } else {
+                cout << "Klaida! Prasome ivesti 'e' arba 'f'!" << endl;
+            }
+        }
+
+        if (outputPasirinkimas == 'e') {
+           
+            std::sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
+            
+            rodytiRezultatus(studentai, naudotiVidurki);
+        } else {
+            
+            char sortingPreference;
+            cout << "Kaip norite surusiuoti studentus? (1 - Pagal galutini bala didejimo tvarka, 2 - Pagal galutini bala mazejimo tvarka, 3 - Pagal varda, 4 - Pagal pavarde, 5 - Pagal varda ir pavarde): ";
+            cin >> sortingPreference;
+
+            if (sortingPreference == '1') {
+                std::sort(studentai.begin(), studentai.end(), SortByFinalScoreAsc(naudotiVidurki));
+            } else if (sortingPreference == '2') {
+                std::sort(studentai.begin(), studentai.end(), SortByFinalScoreDesc(naudotiVidurki));
+            } else if (sortingPreference == '3') {
+                std::sort(studentai.begin(), studentai.end(), lygintiPagalVarda);
+            } else if (sortingPreference == '4') {
+                std::sort(studentai.begin(), studentai.end(), lygintiPagalPavarde);
+            } else if (sortingPreference == '5') {
+                std::sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
+            }
+
+            
+            vector<Studentas> vargsiukai, galvociai;
+            rusiuotiStudentus(studentai, vargsiukai, galvociai, naudotiVidurki);
+
+            string vargsiukaiFilename = "vargsiukai_" + failoPavadinimas;
+            string galvociaiFilename = "galvociai_" + failoPavadinimas;
+
+            rasytiStudentusIFaila(vargsiukai, vargsiukaiFilename, naudotiVidurki);
+            rasytiStudentusIFaila(galvociai, galvociaiFilename, naudotiVidurki);
+
+            cout << "Studentai buvo surusiuoti ir irasyti i failus '" << vargsiukaiFilename << "' ir '" << galvociaiFilename << "'." << endl;
+        }
+
+        
+        cout << "Ar norite apdoroti kita faila? (y/n): ";
+        cin >> continueProcessing;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
