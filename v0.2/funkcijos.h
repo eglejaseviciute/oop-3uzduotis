@@ -1,14 +1,17 @@
 #ifndef FUNKCIJOS_H
 #define FUNKCIJOS_H
 
-#include <vector>
-#include <string>
+
+#include "myLib.h"
 #include "studentas.h"
 
-double skaiciuotiVidurki(const std::vector<int>& namuDarbai);
-double skaiciuotiMediana(std::vector<int> namuDarbai);
-void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis);
-void nuskaitytiDuomenisIsFailo(std::string &failoPavadinimas, std::vector<Studentas> &studentai);
-void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const std::string &filePrefix);
+
+double skaiciuotiVidurki(const vector<int>& namuDarbai);
+double skaiciuotiMediana(vector<int> namuDarbai);
+void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &studentai);
+bool lygintiPagalVarda(const Studentas &a, const Studentas &b);
+void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &filePrefix);
+void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki);
+
 
 #endif // FUNKCIJOS_H
