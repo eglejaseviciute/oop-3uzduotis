@@ -70,28 +70,19 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
 }
 
 
-void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
-    for (int i = 0; i < namuDarbaiKiekis; ++i) {
-        studentas.rezultatai.namuDarbai.push_back(rand() % 11);
-    }
-    studentas.rezultatai.egzaminas = rand() % 11;
-}
-
-
-double skaiciuotiGalutiniBala(const Studentas &studentas, bool naudotiVidurki) {
-    double namuDarbuRezultatas = naudotiVidurki ? 
-        skaiciuotiVidurki(studentas.rezultatai.namuDarbai) : 
-        skaiciuotiMediana(studentas.rezultatai.namuDarbai);
-    return 0.4 * namuDarbuRezultatas + 0.6 * studentas.rezultatai.egzaminas;
-}
-
-
 void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
-    double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
+    double galutinis;
+    if (naudotiVidurki) {
+        double vidurkis = skaiciuotiVidurki(studentas.rezultatai.namuDarbai);
+        galutinis = 0.4 * vidurkis + 0.6 * studentas.rezultatai.egzaminas;
+    } else {
+        double mediana = skaiciuotiMediana(studentas.rezultatai.namuDarbai);
+        galutinis = 0.4 * mediana + 0.6 * studentas.rezultatai.egzaminas;
+    }
 
-    cout << std::left << std::setw(18) << studentas.vardas
-         << std::setw(18) << studentas.pavarde
-         << std::left << std::setw(15) << std::fixed << std::setprecision(2) << galutinis << endl;
+    cout << left << setw(18) << studentas.vardas
+         << setw(18) << studentas.pavarde
+         << left << setw(15) << fixed << setprecision(2) << galutinis << endl;
 }
 
 
