@@ -1,18 +1,16 @@
 #include "funkcijos.h"
 #include "myLib.h"
 
-
 double skaiciuotiVidurki(const vector<int>& namuDarbai) {
-    double suma = 0;
+    double suma = 0.0;
     for (int nd : namuDarbai) {
         suma += nd;
     }
     return suma / namuDarbai.size();
 }
 
-
 double skaiciuotiMediana(vector<int> namuDarbai) {
-    sort(namuDarbai.begin(), namuDarbai.end());
+    std::sort(namuDarbai.begin(), namuDarbai.end());
     int dydis = namuDarbai.size();
     if (dydis % 2 == 0) {
         return (namuDarbai[dydis / 2 - 1] + namuDarbai[dydis / 2]) / 2.0;
@@ -21,53 +19,47 @@ double skaiciuotiMediana(vector<int> namuDarbai) {
     }
 }
 
+void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
+    for (int i = 0; i < namuDarbaiKiekis; ++i) {
+        studentas.rezultatai.namuDarbai.push_back(rand() % 11);
+    }
+    studentas.rezultatai.egzaminas = rand() % 11;
+}
 
-void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, std::vector<Studentas> &studentai) {
-    while (true) { // Ciklas, kad vartotojas galetu pakartotinai ivesti failo pavadinima
-        ifstream failas(failoPavadinimas);
+void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &studentai) {
+    while (true) {
+        std::ifstream failas(failoPavadinimas);
         if (!failas) {
             cout << "Klaida! Nepavyko atidaryti failo: " << failoPavadinimas << endl;
             cout << "Prasome ivesti teisinga failo pavadinima: ";
-            cin >> failoPavadinimas;
-            continue;
+            cin >> failoPavadinimas; 
+            continue; 
         }
 
-        // Praleidziame pirma eilute (antraste)
         string line;
-        if (!getline(failas, line)) {
-            cout << "Klaida! Failas yra tuscias arba neatitinka strukturos." << endl;
-            cout << "Prasome ivesti kita failo pavadinima: ";
-            cin >> failoPavadinimas;
-            continue;
-        }
+        std::getline(failas, line);
 
-        bool arYraDuomenu = false;
-
-        while (getline(failas, line)) {
-            arYraDuomenu = true; // Nustatome, kad radome bent viena duomenu eilute
-            cout << "Nuskaityta eilute: " << line << endl;
+        while (std::getline(failas, line)) {
+            cout << "Nuskaityta eilute: " << line << endl; 
             Studentas studentas;
-            stringstream ss(line);
+            std::stringstream ss(line);
 
-            // Nuskaitome varda ir pavarde
             ss >> studentas.vardas >> studentas.pavarde;
             studentas.rezultatai.namuDarbai.clear();
 
-            // Nuskaitome namu darbus
             string ndInput;
             int nd;
-            int ndIndex = 0;
+            int ndIndex = 0; 
 
             while (ss >> ndInput) {
                 try {
-                    nd = stoi(ndInput);
+                    nd = std::stoi(ndInput);
                     if (nd < 0 || nd > 10) {
                         throw std::invalid_argument("Neteisingas diapazonas");
                     }
                     studentas.rezultatai.namuDarbai.push_back(nd);
                     ndIndex++;
                 } catch (const std::exception&) {
-                    // Klaida su namu darbo rezultatu
                     cout << "Klaida! Netinkamas simbolis ar skaicius studentui(-ei): " 
                          << studentas.vardas << " " << studentas.pavarde 
                          << " (klaida: '" 
@@ -84,50 +76,49 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, std::vector<Studentas> 
                             cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         } else {
                             studentas.rezultatai.namuDarbai.push_back(nd);
-                            break;
+                            break; 
                         }
                     }
                 }
             }
 
             if (!studentas.rezultatai.namuDarbai.empty()) {
-                // Nuskaitome paskutini namu darba kaip egzamino rezultata
                 int egzaminas = studentas.rezultatai.namuDarbai.back();
-                studentas.rezultatai.namuDarbai.pop_back();
+                studentas.rezultatai.namuDarbai.pop_back(); 
 
-                // Tikriname, ar egzaminas tinkamas
                 if (egzaminas < 0 || egzaminas > 10) {
                     cout << "Klaida! Egzamino rezultatas studentui " << studentas.vardas 
-                         << " " << studentas.pavarde << " už neteisinga diapazona." << endl;
+                         << " " << studentas.pavarde << " uz neteisinga diapazona." << endl;
                 } else {
                     studentas.rezultatai.egzaminas = egzaminas;
                 }
             }
 
-            // Pridedame studenta i sarasa
             if (!studentas.rezultatai.namuDarbai.empty()) {
                 studentai.push_back(studentas);
             }
         }
 
-        if (!arYraDuomenu) {
-            // Jei failas turi antraste, bet nera studentu duomenu
-            cout << "Klaida! Failas neatitinka strukturos arba yra tuscias." << endl;
-            cout << "Prasome ivesti kita failo pavadinima: ";
-            cin >> failoPavadinimas;
-            continue;
-        }
-
         failas.close();
-        break;
+        break; 
     }
 }
 
-
-
-bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
-    if (a.vardas == b.vardas) {
-        return a.pavarde < b.pavarde;
+void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &filePrefix) {
+    std::ofstream failas(filePrefix + std::to_string(studentuKiekis) + ".txt");
+    if (!failas) {
+        cout << "Klaida! Nepavyko sukurti failo." << endl;
+        return;
     }
-    return a.vardas < b.vardas;
+
+    for (int i = 1; i <= studentuKiekis; ++i) {
+        failas << "Vardas" << i << " Pavarde" << i << " ";
+        for (int j = 0; j < namuDarbaiKiekis; ++j) {
+            failas << (rand() % 11) << " ";
+        }
+        failas << (rand() % 11) << endl;
+    }
+
+    failas.close();
+    cout << "Failas " << filePrefix + std::to_string(studentuKiekis) + ".txt buvo sukurtas." << endl;
 }
