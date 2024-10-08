@@ -22,6 +22,14 @@ double skaiciuotiMediana(vector<int> namuDarbai) {
 }
 
 
+void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
+    for (int i = 0; i < namuDarbaiKiekis; ++i) {
+        studentas.rezultatai.namuDarbai.push_back(rand() % 11); 
+    }
+    studentas.rezultatai.egzaminas = rand() % 11;
+}
+
+
 void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &studentai) {
     while (true) {
         std::ifstream failas(failoPavadinimas);
@@ -111,11 +119,36 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &stud
 }
 
 
+bool lygintiPagalGalutiniBalaAscending(const Studentas &a, const Studentas &b) {
+    return skaiciuotiGalutiniBala(a, true) < skaiciuotiGalutiniBala(b, true);
+}
+
+
+bool lygintiPagalGalutiniBalaDescending(const Studentas &a, const Studentas &b) {
+    return skaiciuotiGalutiniBala(a, true) > skaiciuotiGalutiniBala(b, true);
+}
+
+
+bool lygintiPagalPavarde(const Studentas &a, const Studentas &b) {
+    return a.pavarde < b.pavarde;
+}
+
+
 bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
-    if (a.vardas == b.vardas) {
-        return a.pavarde < b.pavarde;
-    }
     return a.vardas < b.vardas;
+}
+
+
+bool lygintiPagalVardaIrPavarde(const Studentas &a, const Studentas &b) {
+    return (a.vardas + a.pavarde) < (b.vardas + b.pavarde);
+}
+
+
+double skaiciuotiGalutiniBala(const Studentas &studentas, bool naudotiVidurki) {
+    double namuDarbuRezultatas = naudotiVidurki ? 
+        skaiciuotiVidurki(studentas.rezultatai.namuDarbai) : 
+        skaiciuotiMediana(studentas.rezultatai.namuDarbai);
+    return 0.4 * namuDarbuRezultatas + 0.6 * studentas.rezultatai.egzaminas;
 }
 
 
@@ -126,14 +159,14 @@ void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &fil
         return;
     }
 
-    // Write header
+    
     failas << left << setw(20) << "Vardas" << setw(20) << "Pavarde";
     for (int i = 1; i <= namuDarbaiKiekis; ++i) {
         failas << "ND" << setw(8) << i;
     }
     failas << "Egz." << endl;
 
-    // Generate and write student data
+    
     for (int i = 1; i <= studentuKiekis; ++i) {
         failas << left << setw(20) << "Vardas" + std::to_string(i) 
                << setw(20) << "Pavarde" + std::to_string(i);
@@ -150,12 +183,15 @@ void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &fil
 
 
 void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
-    cout << std::left << std::setw(18) << "Vardas"
-         << std::setw(18) << "Pavarde"
+    cout << left << setw(18) << "Vardas"
+         << setw(18) << "Pavarde"
          << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
     cout << string(60, '-') << endl;
 
     for (const auto& studentas : studentai) {
-        spausdintiStudenta(studentas, naudotiVidurki);
+        double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
+        cout << left << setw(18) << studentas.vardas
+             << setw(18) << studentas.pavarde
+             << fixed << setprecision(2) << galutinis << endl;
     }
 }
