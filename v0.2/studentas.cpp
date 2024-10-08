@@ -1,7 +1,9 @@
 #include "studentas.h"
+#include "myLib.h"
 #include "funkcijos.h"
 
 
+// Funkcija ivedanti studento duomenis
 void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis) {
     cout << "Iveskite studento varda: ";
     cin >> studentas.vardas;
@@ -31,7 +33,7 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
             }
 
             try {
-                rezultatas = std::stoi(input);
+                rezultatas = stoi(input);
                 if (rezultatas < 0 || rezultatas > 10) {
                     cout << "Klaida! Namu darbu rezultatas turi buti tarp 0 ir 10. Iveskite teigiama skaiciu: ";
                 } else {
@@ -47,20 +49,20 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
 
         cout << "Iveskite egzamino rezultata: ";
         while (true) {
-            std::getline(cin, input);
+            getline(cin, input);
             if (input.empty()) {
                 cout << "Klaida! Prasome ivesti egzamino rezultata: ";
             } else {
                 try {
-                    studentas.rezultatai.egzaminas = std::stoi(input);
+                    studentas.rezultatai.egzaminas = stoi(input);
                     if (studentas.rezultatai.egzaminas < 0 || studentas.rezultatai.egzaminas > 10) {
                         cout << "Klaida! Egzamino rezultatas turi buti tarp 0 ir 10. Iveskite tinkama skaiciu: ";
                     } else {
                         break;
                     }
-                } catch (const std::invalid_argument&) {
+                } catch (const invalid_argument&) {
                     cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
-                } catch (const std::out_of_range&) {
+                } catch (const out_of_range&) {
                     cout << "Klaida! Skaicius per didelis. Bandykite dar karta: ";
                 }
             }
@@ -70,23 +72,18 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
 }
 
 
+// Funkcija spausdinanti studento duomenis
 void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
-    double galutinis;
-    if (naudotiVidurki) {
-        double vidurkis = skaiciuotiVidurki(studentas.rezultatai.namuDarbai);
-        galutinis = 0.4 * vidurkis + 0.6 * studentas.rezultatai.egzaminas;
-    } else {
-        double mediana = skaiciuotiMediana(studentas.rezultatai.namuDarbai);
-        galutinis = 0.4 * mediana + 0.6 * studentas.rezultatai.egzaminas;
-    }
-
+    double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
     cout << left << setw(18) << studentas.vardas
          << setw(18) << studentas.pavarde
          << left << setw(15) << fixed << setprecision(2) << galutinis << endl;
 }
 
 
-void rusiuotiStudentus(const vector<Studentas> &studentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, bool naudotiVidurki) {
+// Funkcija rusiuojanti studentus i dvi grupes
+double rusiuotiStudentus(const vector<Studentas> &studentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, bool naudotiVidurki) {
+    auto start = std::chrono::high_resolution_clock::now();
     for (const auto &studentas : studentai) {
         double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
         if (galutinis < 5.0) {
@@ -95,13 +92,18 @@ void rusiuotiStudentus(const vector<Studentas> &studentai, vector<Studentas> &va
             galvociai.push_back(studentas);
         }
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    return diff.count();
 }
 
 
-void rasytiStudentusIFaila(const vector<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki) {
-    std::ofstream failas(failoPavadinimas);
+// Funkcija rasanti studentus i faila
+double rasytiStudentusIFaila(const vector<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki) {
+    auto start = std::chrono::high_resolution_clock::now();
+    ofstream failas(failoPavadinimas);
     if (!failas) {
-        throw std::runtime_error("Nepavyko atidaryti failo: " + failoPavadinimas);
+        throw runtime_error("Nepavyko atidaryti failo: " + failoPavadinimas);
     }
 
     failas << left << setw(18) << "Vardas" << setw(18) << "Pavarde" 
@@ -116,4 +118,7 @@ void rasytiStudentusIFaila(const vector<Studentas> &studentai, const string &fai
     }
 
     failas.close();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    return diff.count();
 }
