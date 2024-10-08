@@ -9,7 +9,7 @@ map<string, VeikimoGreicioMatavimai> veikimoGreicioRezultatai;
 // Funkcija skaiciuojanti vidurki
 double skaiciuotiVidurki(const vector<int>& namuDarbai) {
     if (namuDarbai.empty()) return 0;
-    double suma = 0;
+    double suma = 0.0;
     for (int nd : namuDarbai) {
         suma += nd;
     }
