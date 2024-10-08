@@ -1,13 +1,6 @@
-#include "funkcijos.h"
+#include "studentas.h"
 #include "myLib.h"
-
-
-void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
-    for (int i = 0; i < namuDarbaiKiekis; ++i) {
-        studentas.rezultatai.namuDarbai.push_back(rand() % 11);
-    }
-    studentas.rezultatai.egzaminas = rand() % 11;
-}
+#include "funkcijos.h"
 
 
 void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis) {
@@ -49,7 +42,7 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
             } catch (const std::invalid_argument&) {
                 cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
             } catch (const std::out_of_range&) {
-                cout << "Klaida! Skaičius per didelis. Bandykite dar kartą: ";
+                cout << "Klaida! Skaicius per didelis. Bandykite dar karta: ";
             }
         }
 
@@ -69,7 +62,7 @@ void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiek
                 } catch (const std::invalid_argument&) {
                     cout << "Klaida! Prasome ivesti tinkama skaiciu: ";
                 } catch (const std::out_of_range&) {
-                    cout << "Klaida! Skaičius per didelis. Bandykite dar kartą: ";
+                    cout << "Klaida! Skaicius per didelis. Bandykite dar karta: ";
                 }
             }
         }
@@ -91,4 +84,12 @@ void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
     cout << left << setw(18) << studentas.vardas
          << setw(18) << studentas.pavarde
          << left << setw(15) << fixed << setprecision(2) << galutinis << endl;
+}
+
+
+bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
+    if (a.vardas == b.vardas) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
 }
