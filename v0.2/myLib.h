@@ -1,5 +1,5 @@
-#ifndef MYLIB_H_INCLUDED
-#define MYLIB_H_INCLUDED
+#ifndef MYLIB_H
+#define MYLIB_H
 
 
 #include <iostream>
@@ -13,6 +13,10 @@
 #include <fstream>
 #include <sstream>
 #include <cctype>
+#include <chrono>
+#include <functional>
+#include <map>
+#include <stdexcept>
 
 
 using std::endl;
@@ -28,10 +32,16 @@ using std::setw;
 using std::setprecision;
 using std::fixed;
 using std::getline;
-using std::ifstream;
-using std::stringstream;
+using std::map;
 using std::stoi;
-using std::sort;
+using std::invalid_argument;
+using std::out_of_range;
+using std::ifstream;
+using std::runtime_error;
+using std::stringstream;
+using std::to_string;
+using std::ofstream;
+using std::exception;
 
 
-#endif // MYLIB_H_INCLUDED
+#endif // MYLIB_H
