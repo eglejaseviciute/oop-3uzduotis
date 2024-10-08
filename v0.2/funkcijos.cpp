@@ -1,6 +1,7 @@
 #include "funkcijos.h"
 #include "myLib.h"
 
+
 double skaiciuotiVidurki(const vector<int>& namuDarbai) {
     double suma = 0.0;
     for (int nd : namuDarbai) {
@@ -8,6 +9,7 @@ double skaiciuotiVidurki(const vector<int>& namuDarbai) {
     }
     return suma / namuDarbai.size();
 }
+
 
 double skaiciuotiMediana(vector<int> namuDarbai) {
     std::sort(namuDarbai.begin(), namuDarbai.end());
@@ -19,12 +21,6 @@ double skaiciuotiMediana(vector<int> namuDarbai) {
     }
 }
 
-void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
-    for (int i = 0; i < namuDarbaiKiekis; ++i) {
-        studentas.rezultatai.namuDarbai.push_back(rand() % 11);
-    }
-    studentas.rezultatai.egzaminas = rand() % 11;
-}
 
 void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &studentai) {
     while (true) {
@@ -39,70 +35,89 @@ void nuskaitytiDuomenisIsFailo(string &failoPavadinimas, vector<Studentas> &stud
         string line;
         std::getline(failas, line);
 
+        int lineNumber = 1;
         while (std::getline(failas, line)) {
-            cout << "Nuskaityta eilute: " << line << endl; 
+            lineNumber++;
             Studentas studentas;
             std::stringstream ss(line);
 
-            ss >> studentas.vardas >> studentas.pavarde;
+            if (!(ss >> studentas.vardas >> studentas.pavarde)) {
+                cout << "Klaida eiluteje " << lineNumber << "! Nepavyko nuskaityti vardo ir pavardes." << endl;
+                continue;
+            }
+
             studentas.rezultatai.namuDarbai.clear();
 
-            string ndInput;
+            string input;
             int nd;
-            int ndIndex = 0; 
+            bool egzaminasNuskaitytas = false;
 
-            while (ss >> ndInput) {
+            while (ss >> input) {
                 try {
-                    nd = std::stoi(ndInput);
+                    nd = std::stoi(input);
                     if (nd < 0 || nd > 10) {
-                        throw std::invalid_argument("Neteisingas diapazonas");
+                        throw std::out_of_range("Rezultatas ne intervale [0, 10]");
+                    }
+                    if (!egzaminasNuskaitytas) {
+                        studentas.rezultatai.namuDarbai.push_back(nd);
+                    } else {
+                        cout << "Klaida eiluteje " << lineNumber << "! Po egzamino rezultato aptikti papildomi duomenys." << endl;
+                        break;
+                    }
+                } catch (const std::invalid_argument&) {
+                    cout << "Klaida eiluteje " << lineNumber << "! Netinkamas simbolis '" << input << "' studentui(-ei): " 
+                         << studentas.vardas << " " << studentas.pavarde << "." << endl;
+                    cout << "Iveskite tinkama rezultata (skaicius nuo 0 iki 10): ";
+                    while (!(cin >> nd) || nd < 0 || nd > 10) {
+                        cout << "Klaida! Iveskite skaiciu tarp 0 ir 10: ";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     }
                     studentas.rezultatai.namuDarbai.push_back(nd);
-                    ndIndex++;
-                } catch (const std::exception&) {
-                    cout << "Klaida! Netinkamas simbolis ar skaicius studentui(-ei): " 
-                         << studentas.vardas << " " << studentas.pavarde 
-                         << " (klaida: '" 
-                         << ndInput << "')." << endl;
-
-                    cout << "Iveskite tinkama rezultata (skaicius nuo 0 iki 10) studentui(-ei): "
-                         << studentas.vardas << " " << studentas.pavarde << ": ";
-
-                    while (true) {
-                        cin >> nd;
-                        if (cin.fail() || nd < 0 || nd > 10) {
-                            cout << "Klaida! Iveskite skaiciu tarp 0 ir 10: ";
-                            cin.clear();
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                        } else {
-                            studentas.rezultatai.namuDarbai.push_back(nd);
-                            break; 
-                        }
+                } catch (const std::out_of_range&) {
+                    cout << "Klaida eiluteje " << lineNumber << "! Rezultatas '" << input << "' ne intervale [0, 10] studentui(-ei): " 
+                         << studentas.vardas << " " << studentas.pavarde << "." << endl;
+                    cout << "Iveskite tinkama rezultata (skaicius nuo 0 iki 10): ";
+                    while (!(cin >> nd) || nd < 0 || nd > 10) {
+                        cout << "Klaida! Iveskite skaiciu tarp 0 ir 10: ";
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     }
+                    studentas.rezultatai.namuDarbai.push_back(nd);
                 }
             }
 
-            if (!studentas.rezultatai.namuDarbai.empty()) {
-                int egzaminas = studentas.rezultatai.namuDarbai.back();
-                studentas.rezultatai.namuDarbai.pop_back(); 
-
-                if (egzaminas < 0 || egzaminas > 10) {
-                    cout << "Klaida! Egzamino rezultatas studentui " << studentas.vardas 
-                         << " " << studentas.pavarde << " uz neteisinga diapazona." << endl;
-                } else {
-                    studentas.rezultatai.egzaminas = egzaminas;
-                }
+            if (studentas.rezultatai.namuDarbai.empty()) {
+                cout << "Klaida eiluteje " << lineNumber << "! Nerasta nama darbu rezultatu studentui(-ei): " 
+                     << studentas.vardas << " " << studentas.pavarde << "." << endl;
+                continue;
             }
 
-            if (!studentas.rezultatai.namuDarbai.empty()) {
-                studentai.push_back(studentas);
+            studentas.rezultatai.egzaminas = studentas.rezultatai.namuDarbai.back();
+            studentas.rezultatai.namuDarbai.pop_back();
+
+            if (studentas.rezultatai.namuDarbai.empty()) {
+                cout << "Klaida eiluteje " << lineNumber << "! Nerasta namu darbu rezultatu studentui(-ei): " 
+                     << studentas.vardas << " " << studentas.pavarde << " (tik egzamino rezultatas)." << endl;
+                continue;
             }
+
+            studentai.push_back(studentas);
         }
 
         failas.close();
         break; 
     }
 }
+
+
+bool lygintiPagalVarda(const Studentas &a, const Studentas &b) {
+    if (a.vardas == b.vardas) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
+}
+
 
 void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &filePrefix) {
     std::ofstream failas(filePrefix + std::to_string(studentuKiekis) + ".txt");
@@ -111,14 +126,36 @@ void generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &fil
         return;
     }
 
+    // Write header
+    failas << left << setw(20) << "Vardas" << setw(20) << "Pavarde";
+    for (int i = 1; i <= namuDarbaiKiekis; ++i) {
+        failas << "ND" << setw(8) << i;
+    }
+    failas << "Egz." << endl;
+
+    // Generate and write student data
     for (int i = 1; i <= studentuKiekis; ++i) {
-        failas << "Vardas" << i << " Pavarde" << i << " ";
+        failas << left << setw(20) << "Vardas" + std::to_string(i) 
+               << setw(20) << "Pavarde" + std::to_string(i);
+        
         for (int j = 0; j < namuDarbaiKiekis; ++j) {
-            failas << (rand() % 11) << " ";
+            failas << setw(10) << (rand() % 11);
         }
         failas << (rand() % 11) << endl;
     }
 
     failas.close();
     cout << "Failas " << filePrefix + std::to_string(studentuKiekis) + ".txt buvo sukurtas." << endl;
+}
+
+
+void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
+    cout << std::left << std::setw(18) << "Vardas"
+         << std::setw(18) << "Pavarde"
+         << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
+    cout << string(60, '-') << endl;
+
+    for (const auto& studentas : studentai) {
+        spausdintiStudenta(studentas, naudotiVidurki);
+    }
 }
