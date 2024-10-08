@@ -1,16 +1,15 @@
+
 #include "myLib.h"
 #include "studentas.h"
 #include "funkcijos.h"
 
-int main() {
-    srand(static_cast<unsigned>(time(0)));
 
-    vector<Studentas> studentai;
+int main() {
+    srand(static_cast<unsigned>(time(0))); 
+
     char pasirinkimas;
 
     while (true) {
-        studentai.clear();
-
         cout << "\nAr norite generuoti failus (g) ar nuskaityti duomenis is failo (f), ar juos ivesti patys (i)? (iveskite g arba f, arba i): ";
         cin >> pasirinkimas;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -55,80 +54,12 @@ int main() {
                     }
                 }
             }
-            continue;
-        } else if (pasirinkimas == 'f' || pasirinkimas == 'i') {
+            continue; 
+        } else if (pasirinkimas == 'f') {
+            procesarArchivosBucle();
             break;
-        } else {
-            cout << "Klaida! Prasome ivesti 'g', 'f' arba 'i'!" << endl;
-        }
-    }
-    try {
-        if (pasirinkimas == 'f') {
-            string failoPavadinimas;
-            cout << "Iveskite failo pavadinima (pvz., studentai.txt): ";
-            getline(cin, failoPavadinimas);
-            nuskaitytiDuomenisIsFailo(failoPavadinimas, studentai);
-
-            
-            char metodoPasirinkimas;
-            while (true) {
-                cout << "Ar norite skaiciuoti galutini bala pagal vidurki (v) ar mediana (m)? (iveskite v arba m): ";
-                cin >> metodoPasirinkimas;
-
-                if (metodoPasirinkimas == 'v' || metodoPasirinkimas == 'm') {
-                    break; 
-                } else {
-                    cout << "Klaida! Prasome ivesti 'v' arba 'm'!" << endl;
-                }
-            }
-
-            bool naudotiVidurki = (metodoPasirinkimas == 'v');
-
-            
-            char outputPasirinkimas;
-            while (true) {
-                cout << "Ar norite matyti rezultatus ekrane (e) ar surusiuosti studentus i dvi kategorijas ir irasyti i failus (f)? (iveskite e arba f): ";
-                cin >> outputPasirinkimas;
-
-                if (outputPasirinkimas == 'e' || outputPasirinkimas == 'f') {
-                    break;
-                } else {
-                    cout << "Klaida! Prasome ivesti 'e' arba 'f'!" << endl;
-                }
-            }
-
-            if (outputPasirinkimas == 'e') {
-                
-                std::sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
-                
-                rodytiRezultatus(studentai, naudotiVidurki);
-            } else {
-                char sortingPreference;
-                cout << "Kaip norite surusiuoti studentus? (1 - Pagal galutini bala didejimo tvarka, 2 - Pagal galutini bala mazejimo tvarka, 3 - Pagal varda, 4 - Pagal pavarde, 5 - Pagal varda ir pavarde): ";
-                cin >> sortingPreference;
-
-                if (sortingPreference == '1') {
-                    std::sort(studentai.begin(), studentai.end(), lygintiPagalGalutiniBalaAscending);
-                } else if (sortingPreference == '2') {
-                    std::sort(studentai.begin(), studentai.end(), lygintiPagalGalutiniBalaDescending);
-                } else if (sortingPreference == '3') {
-                    std::sort(studentai.begin(), studentai.end(), lygintiPagalVarda);
-                } else if (sortingPreference == '4') {
-                    std::sort(studentai.begin(), studentai.end(), lygintiPagalPavarde);
-                } else if (sortingPreference == '5') {
-                    std::sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
-                }
-
-                vector<Studentas> vargsiukai, galvociai;
-                rusiuotiStudentus(studentai, vargsiukai, galvociai, naudotiVidurki);
-
-                rasytiStudentusIFaila(vargsiukai, "vargsiukai.txt", naudotiVidurki);
-                rasytiStudentusIFaila(galvociai, "galvociai.txt", naudotiVidurki);
-
-                cout << "Studentai buvo surusiuoti ir irasyti i failus 'vargsiukai.txt' ir 'galvociai.txt'." << endl;
-            }
-
         } else if (pasirinkimas == 'i') {
+            vector<Studentas> studentai;
             int studentuSkaicius;
             while (true) {
                 cout << "Kiek studentu norite ivesti? ";
@@ -183,7 +114,6 @@ int main() {
                 studentai.push_back(studentas);
             }
 
-            
             char metodoPasirinkimas;
             while (true) {
                 cout << "Ar norite skaiciuoti galutini bala pagal vidurki (v) ar mediana (m)? (iveskite v arba m): ";
@@ -198,14 +128,15 @@ int main() {
 
             bool naudotiVidurki = (metodoPasirinkimas == 'v');
 
-            
+    
             std::sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
 
-            
+    
             rodytiRezultatus(studentai, naudotiVidurki);
+            break;
+        } else {
+            cout << "Klaida! Prasome ivesti 'g', 'f' arba 'i'!" << endl;
         }
-    } catch (const std::exception &e) {
-        cout << e.what() << endl;
     }
 
     return 0;
