@@ -196,6 +196,7 @@ bool lygintiPagalVardaIrPavarde(const Studentas &a, const Studentas &b) {
 }
 
 
+// Funkcija generuojanti failus
 double generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &filePrefix) {
     auto start = std::chrono::high_resolution_clock::now();
     string fileName = filePrefix + to_string(studentuKiekis) + ".txt";
@@ -236,20 +237,24 @@ double generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &f
 
 // Funkcija rezultatu rodymui ekrane
 void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
+    cout << "\n" << endl;
     cout << left << setw(18) << "Vardas"
-         << setw(18) << "Pavarde"
+         << setw(22) << "Pavarde"
+         << setw(25) << "Adresas atmintyje"
          << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
-    cout << string(60, '-') << endl;
+    cout << string(83, '-') << endl;
 
     for (const auto& studentas : studentai) {
         double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
         cout << left << setw(18) << studentas.vardas
-             << setw(18) << studentas.pavarde
+             << setw(22) << studentas.pavarde
+             << setw(25) << &studentas  // adresas atmintyje
              << fixed << setprecision(2) << galutinis << endl;
     }
 }
 
 
+// Funkcija greicio rezultatu rodymui
 void rodytiGreicioAnalizesRezultatus(const string& failoPavadinimas) {
     auto& rezultatai = veikimoGreicioRezultatai[failoPavadinimas];
     cout << "\nGreicio analizes rezultatai failui: " << failoPavadinimas << endl;
@@ -284,7 +289,7 @@ void failuApdorojimoCiklas() {
 
         try {
             nuskaitytiDuomenisIsFailo(failoPavadinimas, studentai);
-            apdorotiFailai.push_back(failoPavadinimas); // Pridedame į apdorotų failų sąrašą
+            apdorotiFailai.push_back(failoPavadinimas); // Pridedame i apdorotu failu sarasa
         } catch (const runtime_error& e) {
             cout << e.what() << " Bandykite dar karta." << endl;
             continue;
@@ -308,7 +313,6 @@ void failuApdorojimoCiklas() {
         bool naudotiVidurki = (tolower(metodoPasirinkimas) == 'v');
 
         try {
-            // If the container is std::vector, keep using std::sort
             sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
             rodytiRezultatus(studentai, naudotiVidurki);
         } catch (const exception& e) {
@@ -322,7 +326,8 @@ void failuApdorojimoCiklas() {
     }
 }
 
-// Modified greicioAnalize function
+
+// Funkcija greicio analizei atlikti
 void greicioAnalize() {
     string failoPavadinimas;
     char testiApdorojima = 't';
@@ -361,21 +366,20 @@ void greicioAnalize() {
                 "'1', '2', '3', '4' arba '5'!\n");
 
             if (rusiavimoPasirinkimas == '1') {
-    sort(studentai.begin(), studentai.end(), RusiuotiPagalGalutiniBalaDidejanciai(naudotiVidurki));
-} else if (rusiavimoPasirinkimas == '2') {
-    sort(studentai.begin(), studentai.end(), RusiuotiPagalGalutiniBalaMazejanciai(naudotiVidurki));
-} else if (rusiavimoPasirinkimas == '3') {
-    sort(studentai.begin(), studentai.end(), lygintiPagalVarda);
-} else if (rusiavimoPasirinkimas == '4') {
-    sort(studentai.begin(), studentai.end(), lygintiPagalPavarde);
-} else {
-    sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
-}
+                sort(studentai.begin(), studentai.end(), RusiuotiPagalGalutiniBalaDidejanciai(naudotiVidurki));
+            } else if (rusiavimoPasirinkimas == '2') {
+                sort(studentai.begin(), studentai.end(), RusiuotiPagalGalutiniBalaMazejanciai(naudotiVidurki));
+            } else if (rusiavimoPasirinkimas == '3') {
+                sort(studentai.begin(), studentai.end(), lygintiPagalVarda);
+            } else if (rusiavimoPasirinkimas == '4') {
+                sort(studentai.begin(), studentai.end(), lygintiPagalPavarde);
+            } else {
+                sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
+            }
 
 
             vector<Studentas> vargsiukai, galvociai;
             
-            // Measure sorting and grouping time
             double rusiavimoLaikas = rusiuotiStudentus(studentai, vargsiukai, galvociai, naudotiVidurki);
             veikimoGreicioRezultatai[failoPavadinimas].rusiavimoLaikas = rusiavimoLaikas;
 
@@ -400,7 +404,7 @@ void greicioAnalize() {
             "'t' arba 'n'!\n");
     }
 
-    // Display results
+
     if (!apdorotiFailai.empty()) {
         cout << "\nRezultatai visiems apdorotiems failams:" << endl;
         double bendrasLaikas = 0.0;
