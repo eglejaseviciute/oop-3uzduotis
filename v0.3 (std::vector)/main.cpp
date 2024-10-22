@@ -4,7 +4,6 @@
 
 
 // Pagrindinė funkcija
-// Pagrindinė funkcija
 int main() {
     srand(static_cast<unsigned>(time(0)));
 
@@ -102,7 +101,7 @@ int main() {
                             if (cin >> namuDarbaiKiekis && namuDarbaiKiekis > 0) {
                                 break;
                             }
-                            cout << "\nKlaida! Iveskite teigiama skaiciu: ";
+                            cout << "\nKlaida! Iveskite teigiama skaiciu!";
                             cin.clear();
                             cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         }
@@ -121,7 +120,6 @@ int main() {
                 "'v' arba 'm'!\n");
                 bool naudotiVidurki = (metodoPasirinkimas == 'v');
 
-                // If the container is std::vector, keep using std::sort
                 sort(studentai.begin(), studentai.end(), lygintiPagalVardaIrPavarde);
                 rodytiRezultatus(studentai, naudotiVidurki);
             }
