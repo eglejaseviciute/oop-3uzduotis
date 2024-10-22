@@ -1,7 +1,7 @@
 # Objektinis programavimas (1-oji užduotis)
 * Kompiuteris ***(testavimo sistemos parametrai)***:
   - CPU - APPLE M2
-  - RAM - 8GB
+  - RAM - 8 GB
   - SSD - 512 GB
 # 
 * Programos ***veikimo greičio analizė*** priklausomai nuo naudojamo vieno iš ***dviejų konteinerių***:
