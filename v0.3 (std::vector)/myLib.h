@@ -9,7 +9,6 @@
 #include <iomanip>
 #include <algorithm>
 #include <cstdlib>
-#include <ctime>
 #include <fstream>
 #include <sstream>
 #include <cctype>
