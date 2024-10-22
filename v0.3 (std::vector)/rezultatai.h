@@ -5,6 +5,7 @@
 #include "myLib.h"
 
 
+// Strukturos aprasymas rezultatams
 struct Rezultatai {
     vector<int> namuDarbai;
     int egzaminas;
