@@ -29,7 +29,7 @@ double generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &f
 void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki);
 void rodytiGreicioAnalizesRezultatus(const string& failoPavadinimas);
 void failuApdorojimoCiklas();
-void atliktiGreicioAnalize();
+void greicioAnalize();
 
 
 #endif // FUNKCIJOS_H
