@@ -112,10 +112,10 @@ Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirink
       - 4 - pagal pavardę,
       - 5 - pagal vardą ir pavardę;
       ir galiausiai įrašys studentus į du atskirus failus - ***"vargsiukai_X.txt"*** ir ***"galvociai_X.txt"***, kur X yra failo pavadinimas. Tuomet bus paklausta, ar norima nuskaityti kitą failą, jei pasirenkama "Taip" (ekrane įvedama raidė 't') bus prašoma įvesti tinkamą failo pavadinimą ir visi likusieji žingsniai vėl kartosis, o jei pasirenkama "NE" (ekrane įvedama raidė 'n'), darbas baigiamas su pasirinkta funkcija ir parodoma atliktos ***programos veikimo greičio analizės*** rezultatai:
-      - failo sukūrimo,
-      - duomenų nuskaitymo iš failo,
-      - studentų rūšiavimą į dvi grupes (iš prieš tai sukurto failo),
-      - surūšiuotų studentų išvedimą į du naujus failus (iš prieš tai sukurto failo).
+        - failo sukūrimo,
+        - duomenų nuskaitymo iš failo,
+        - studentų rūšiavimą į dvi grupes (iš prieš tai sukurto failo),
+        - surūšiuotų studentų išvedimą į du naujus failus (iš prieš tai sukurto failo).
     * jei pasirenkama "Palyginti visas strategijas", programa parodys visų ***strategijų rūšiavimo rezultatus***, bei ***užimamos atminties dydį***.
 
 Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirinkti kitą funkciją. Jei pasirenkama "Taip" (ekrane įvedama raidė 't') grįžtama į pagrindinį meniu, jei pasirenkama "NE" (ekrane įvedama raidė 'n') - programa baigia darbą.
