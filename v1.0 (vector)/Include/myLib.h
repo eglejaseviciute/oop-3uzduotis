@@ -16,6 +16,7 @@
 #include <functional>
 #include <map>
 #include <stdexcept>
+#include <numeric>
 
 
 using std::endl;
@@ -41,6 +42,10 @@ using std::stringstream;
 using std::to_string;
 using std::ofstream;
 using std::exception;
+using std::partition;
+using std::pair;
+using std::make_pair;
+using std::move;
 
 
 #endif // MYLIB_H
