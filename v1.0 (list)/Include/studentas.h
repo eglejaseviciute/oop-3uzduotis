@@ -16,7 +16,6 @@ struct Studentas {
 
 void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis);
 void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki);
-double rusiuotiStudentus(const list<Studentas> &studentai, list<Studentas> &vargsiukai, list<Studentas> &galvociai, bool naudotiVidurki);
 double rasytiStudentusIFaila(const list<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki);
 
 
