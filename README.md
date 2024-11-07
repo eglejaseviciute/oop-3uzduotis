@@ -22,7 +22,8 @@
     - studentų rūšiavimą į dvi grupes (iš prieš tai sukurto failo),
     - surūšiuotų studentų išvedimą į du naujus failus (iš prieš tai sukurto failo).
 
-<img width="799" alt="Screenshot 2024-11-07 at 18 52 17" src="https://github.com/user-attachments/assets/d5d1d5cf-36de-4405-bab8-0fb92da06aff">
+<img width="799" alt="analize" src="https://github.com/user-attachments/assets/7a704ec5-403b-4f22-8586-d9b313bb4d5e">
+
 
 * ### v0.3
   * Sukurta alternatyvi programos versija, kur vietoj ***std::vector*** studentų duomenims saugoti naudojama ***std::list***;
