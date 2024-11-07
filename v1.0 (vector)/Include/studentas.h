@@ -6,6 +6,7 @@
 #include "myLib.h"
 
 
+
 // Strukturos aprasymas studentui
 struct Studentas {
     string vardas;
@@ -16,7 +17,6 @@ struct Studentas {
 
 void ivestiStudenta(Studentas &studentas, bool atsitiktiniai, int namuDarbaiKiekis);
 void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki);
-double rusiuotiStudentus(const vector<Studentas> &studentai, vector<Studentas> &vargsiukai, vector<Studentas> &galvociai, bool naudotiVidurki);
 double rasytiStudentusIFaila(const vector<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki);
 
 
