@@ -1,6 +1,8 @@
 #include "myLib.h"
 #include "studentas.h"
 #include "funkcijos.h"
+#include "strategijos.h"
+
 
 
 // Pagrindinė funkcija
