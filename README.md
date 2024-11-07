@@ -46,7 +46,8 @@
       -  std::iota;
       -  std::splice.
         
-<img width="1030" alt="Screenshot 2024-11-07 at 19 42 26" src="https://github.com/user-attachments/assets/5985537a-2257-4c49-99ed-5d34308824a3">
+<img width="1030" alt="greiciai" src="https://github.com/user-attachments/assets/28dc0498-8512-4c0c-a147-acade838821b">
+
 
 #
 ## Programos įdiegimo instrukcija
