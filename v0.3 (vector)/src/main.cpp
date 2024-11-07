@@ -1,6 +1,7 @@
 #include "myLib.h"
 #include "studentas.h"
 #include "funkcijos.h"
+#include "strategijos.h"
 
 
 // Pagrindinė funkcija
@@ -15,7 +16,7 @@ int main() {
             pasirinkimas = gautiTinkamaSymboli(
             "Pasirinkite:\n"
             "* generuoti failus (g)\n"
-            "* nuskaityti duomenis iš failo (f)\n"
+            "* nuskaityti duomenis is failo (f)\n"
             "* juos ivesti patiems (i)\n"
             "* atlikti veikimo greicio analize (a)\n"
             "(Iveskite 'g', 'f', 'i' arba 'a'!): ",
