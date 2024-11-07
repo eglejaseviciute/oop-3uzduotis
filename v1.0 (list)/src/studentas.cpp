@@ -81,23 +81,6 @@ void spausdintiStudenta(const Studentas &studentas, bool naudotiVidurki) {
 }
 
 
-// Funkcija rusiuojanti studentus i dvi grupes
-double rusiuotiStudentus(const list<Studentas> &studentai, list<Studentas> &vargsiukai, list<Studentas> &galvociai, bool naudotiVidurki) {
-    auto start = std::chrono::high_resolution_clock::now();
-    for (const auto &studentas : studentai) {
-        double galutinis = skaiciuotiGalutiniBala(studentas, naudotiVidurki);
-        if (galutinis < 5.0) {
-            vargsiukai.push_back(studentas);
-        } else {
-            galvociai.push_back(studentas);
-        }
-    }
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> diff = end - start;
-    return diff.count();
-}
-
-
 // Funkcija rasanti studentus i faila
 double rasytiStudentusIFaila(const list<Studentas> &studentai, const string &failoPavadinimas, bool naudotiVidurki) {
     auto start = std::chrono::high_resolution_clock::now();
