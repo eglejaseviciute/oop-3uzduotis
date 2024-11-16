@@ -46,15 +46,17 @@
       -  std::iota;
       -  std::splice.
         
-<img width="1030" alt="greiciai" src="https://github.com/user-attachments/assets/28dc0498-8512-4c0c-a147-acade838821b">
+<img width="1030" alt="Greiciai" src="https://github.com/user-attachments/assets/b3ba2924-7b97-44f0-9668-38188789b750">
+
 
 
 #
 ## Programos įdiegimo instrukcija
-  1. Pirmiausia reikia ***parsisiųsti "v1.0 (vector)" arba "v1.0 (list)" (arba abi) direktoriją (-as)***.
-  2. Tuomet reikia savo kompiuteryje ***įsijungti "Terminal"*** ir pirmiausia ***įvesti kelią iki direktorijos***, kuri buvo parsiųsta: "cd "čia įrašyti kelią iki direktorijos"", tuomet paspausti "Enter" ir ***įvesti "./run.sh"*** (jei nesuveiktų "./run.sh", prieš "./run.sh" reiktų dar suvesti "chmod +x run.sh").
-  3. Po "./run.sh" paleidomo - ***programa terminale pasileis***. 
-  4. Pakartotiniam programos paleidimui terminale vėl reikės ***įvesti kelią iki direktorijos*** ir vietoj "./run.sh", gelėsite įvesti ***"/v1.0_vector"*** (std::vector atveju) arba ***"./v1.0_list"*** (std::list atveju).
+  1. Pirmiausia reikia ***parsisiųsti CMake programą***, kag būtų galima ***kurti CMakeLists.txt*** failus.
+  2. Tuomet reikia ***parsisiųsti "v1.0 (vector)" arba "v1.0 (list)" (arba abi) direktoriją (-as)***.
+  3. Taip pat savo kompiuteryje reikia ***įsijungti "Terminal"*** ir pirmiausia ***įvesti kelią iki direktorijos***, kuri buvo parsiųsta: "cd "čia įrašyti kelią iki direktorijos"", tuomet paspausti "Enter" ir ***įvesti "./run.sh"*** (jei nesuveiktų "./run.sh", prieš "./run.sh" reiktų dar suvesti "chmod +x run.sh").
+  4. Po "./run.sh" paleidomo - ***programa terminale pasileis***. 
+  5. Pakartotiniam programos paleidimui terminale vėl reikės ***įvesti kelią iki direktorijos*** ir vietoj "./run.sh", gelėsite įvesti ***"/v1.0_vector"*** (std::vector atveju) arba ***"./v1.0_list"*** (std::list atveju).
 
 # 
 ## Naudojimosi programa instrukcija
