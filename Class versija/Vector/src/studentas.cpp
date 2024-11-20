@@ -17,7 +17,6 @@ void Studentas::ivestiStudenta(bool atsitiktiniai, int namuDarbaiKiekis) {
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     if (atsitiktiniai) {
-        // Assuming generuotiRezultatus is modified to work with the new class
         generuotiRezultatus(*this, namuDarbaiKiekis);
     } else {
         string input;
