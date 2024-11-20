@@ -8,8 +8,8 @@
 // Studentas klase: reprezentuoja individualu studenta
 class Studentas {
 private:
-    std::string vardas_;
-    std::string pavarde_;
+    string vardas_;
+    string pavarde_;
     Rezultatai rezultatai_;
 
 public:
@@ -17,20 +17,20 @@ public:
     // Numatytasis konstruktorius
     Studentas() = default;
     // Konstruktorius su vardu ir pavarde
-    Studentas(const std::string& vardas, const std::string& pavarde);
+    Studentas(const string& vardas, const string& pavarde);
 
 
     // Destruktorius, automatiškai atlaisvina klasės išteklius
     ~Studentas() = default;
 
     // Getteriai, leidzia saugiai pasiekti studento duomenis
-    inline std::string vardas() const { return vardas_; }
-    inline std::string pavarde() const { return pavarde_; }
+    inline string vardas() const { return vardas_; }
+    inline string pavarde() const { return pavarde_; }
     inline const Rezultatai& rezultatai() const { return rezultatai_; }
     
     // Setteriai, leidzia keisti studento duomenis
-    void setVardas(const std::string& vardas) { vardas_ = vardas; }
-    void setPavarde(const std::string& pavarde) { pavarde_ = pavarde; }
+    void setVardas(const string& vardas) { vardas_ = vardas; }
+    void setPavarde(const string& pavarde) { pavarde_ = pavarde; }
     void setRezultatai(const Rezultatai& rezultatai) { rezultatai_ = rezultatai; }
     
     // Metodai
@@ -48,8 +48,8 @@ bool lygintiPagalVardaIrPavarde(const Studentas& a, const Studentas& b);
 
 
 // Failo rasymo funkcija
-double rasytiStudentusIFaila(const std::vector<Studentas>& studentai, 
-                            const std::string& failoPavadinimas, 
+double rasytiStudentusIFaila(const vector<Studentas>& studentai,
+                            const string& failoPavadinimas, 
                             bool naudotiVidurki);
 
 
