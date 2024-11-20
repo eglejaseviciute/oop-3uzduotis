@@ -1,3 +1,16 @@
+# Objektinis programavimas (2-oji užduotis)
+## **Programos versijų aprašymas**
+
+* ### v1.1
+
+  * Ankstesnės atliktos užduoties pagrindu sukurta nauja repozitorija ***oop-2uzduotis***, kurioje išliko ***commit***'ų ir ***tag***'ų istorija.
+  * Ankstesnės programos versijos naudojančios struct'ūras, ***pakeistos į class'es***. Taip pat pridėtas testavimas su ***-O1***, ***-O2***, ***-O3*** kompiliatoriaus optimizacijos lygiais.
+    Šios programos versijos dabar talpinamos ***Class versija*** direktorijoje.
+  * Atlikta eksperimentinė realizacijos spartos analizė pagal kompiliatoriaus optimizavimo lygį, naudojant fiksuotą konteinerį - vektorių ir greičiausią rūšiavimo strategiją (3 strategiją).
+
+<img width="850" alt="Analize" src="https://github.com/user-attachments/assets/379af23c-dda5-4154-9058-a04d39a8c859">
+
+
 # Objektinis programavimas (1-oji užduotis)
 ## Programos versijų aprašymas
 * ### v.pradinė
@@ -52,7 +65,7 @@
 
 #
 ## Programos įdiegimo instrukcija
-  1. Pirmiausia reikia ***parsisiųsti CMake programą***, kag būtų galima ***kurti CMakeLists.txt*** failus.
+  1. Pirmiausia reikia ***parsisiųsti CMake programą***, kad būtų galima ***kurti CMakeLists.txt*** failus.
   2. Tuomet reikia ***parsisiųsti "v1.0 (vector)" arba "v1.0 (list)" (arba abi) direktoriją (-as)***.
   3. Taip pat savo kompiuteryje reikia ***įsijungti "Terminal"*** ir pirmiausia ***įvesti kelią iki direktorijos***, kuri buvo parsiųsta: "cd "čia įrašyti kelią iki direktorijos"", tuomet paspausti "Enter" ir ***įvesti "./run.sh"*** (jei nesuveiktų "./run.sh", prieš "./run.sh" reiktų dar suvesti "chmod +x run.sh").
   4. Po "./run.sh" paleidomo - ***programa terminale pasileis***. 
