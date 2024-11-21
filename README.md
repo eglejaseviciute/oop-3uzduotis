@@ -4,7 +4,7 @@
 * ### v1.1
 
   * Ankstesnės atliktos užduoties pagrindu sukurta nauja repozitorija ***oop-2uzduotis***, kurioje išliko ***commit***'ų ir ***tag***'ų istorija.
-  * Ankstesnės programos versijos naudojančios struct'ūras, ***pakeistos į class'es***. Taip pat pridėtas testavimas su ***-O1***, ***-O2***, ***-O3*** kompiliatoriaus optimizacijos lygiais.
+  * Ankstesnės programos versijos, naudojančios struct'ūras, ***pakeistos į class'es***. Taip pat pridėtas testavimas su ***-O1***, ***-O2***, ***-O3*** kompiliatoriaus optimizacijos lygiais.
     Šios programos versijos dabar talpinamos ***Class versija*** direktorijoje.
   * Atlikta eksperimentinė realizacijos spartos analizė pagal kompiliatoriaus optimizavimo lygį, naudojant fiksuotą konteinerį - vektorių ir greičiausią rūšiavimo strategiją (3 strategiją).
 
