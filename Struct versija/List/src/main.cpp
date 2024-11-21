@@ -4,7 +4,6 @@
 #include "strategijos.h"
 
 
-
 // Pagrindinė funkcija
 int main() {
     srand(static_cast<unsigned>(time(0)));
