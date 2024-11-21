@@ -7,7 +7,6 @@
 
 
 // Strategiju funkciju deklaracijos
-
 double rusiuotiStudentusStrategija1(const list<Studentas>& studentai, 
                                    list<Studentas>& vargsiukai, 
                                    list<Studentas>& galvociai, 
