@@ -1,6 +1,7 @@
 #ifndef STRATEGIJOS_H
 #define STRATEGIJOS_H
 
+
 #include "myLib.h"
 #include "studentas.h"
 
@@ -19,6 +20,7 @@ double rusiuotiStudentusStrategija3(list<Studentas>& studentai,
                                    list<Studentas>& vargsiukai, 
                                    bool naudotiVidurki);
 
+// Testavimo ir palyginimo funkciju deklaracijos
 void testuotiStrategija(const string& strategijaPavadinimas,
                        list<Studentas>& studentai,
                        bool naudotiVidurki);
