@@ -7,7 +7,6 @@ Studentas::Studentas(const string& vardas, const string& pavarde)
     : vardas_(vardas), pavarde_(pavarde) {}
 
 
-
 // Funkcija ivedanti studento duomenis
 void Studentas::ivestiStudenta(bool atsitiktiniai, int namuDarbaiKiekis) {
     cout << "Iveskite studento varda: ";
@@ -92,7 +91,6 @@ double Studentas::skaiciuotiGalutiniBala(bool naudotiVidurki) const {
         skaiciuotiMediana(rezultatai_.namuDarbai());
     return 0.4 * namuDarbuRezultatas + 0.6 * rezultatai_.egzaminas();
 }
-
 
 
 // Funkcija rasanti studentus i faila
