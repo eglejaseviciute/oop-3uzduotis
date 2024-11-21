@@ -297,7 +297,7 @@ void failuApdorojimoCiklas() {
         }
 
         do {
-            testiApdorojima = gautiTinkamaSymboli("\nAr norite nuskaityti kita faila? (Iveskite 't' - TAIP arba 'n' - NE)", "'t' arba 'n'!");
+            testiApdorojima = gautiTinkamaSymboli("\nAr norite nuskaityti kita faila? (Iveskite 't' - TAIP arba 'n' - NE): ", "'t' arba 'n'!");
         } while (tolower(testiApdorojima) != 't' && tolower(testiApdorojima) != 'n');
     }
 }
