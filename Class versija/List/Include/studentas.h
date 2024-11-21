@@ -1,10 +1,7 @@
 #ifndef STUDENTAS_H
 #define STUDENTAS_H
 
-#include <string>
-#include <list>
-#include <iostream>
-#include <iomanip>
+
 #include "rezultatai.h"
 
 
@@ -22,10 +19,8 @@ public:
     // Konstruktorius su vardu ir pavarde
     Studentas(const string& vardas, const string& pavarde);
 
-
     // Destruktorius, automatiškai atlaisvina klasės išteklius
     ~Studentas() = default;
-
 
     // Getteriai, leidzia saugiai pasiekti studento duomenis
     inline string vardas() const { return vardas_; }
@@ -44,16 +39,16 @@ public:
 };
 
 
-// Rusiavimo funkcijos
-bool lygintiPagalPavarde(const Studentas& a, const Studentas& b);
-bool lygintiPagalVarda(const Studentas& a, const Studentas& b);
-bool lygintiPagalVardaIrPavarde(const Studentas& a, const Studentas& b);
-
-
 // Failo rasymo funkcija
 double rasytiStudentusIFaila(const list<Studentas>& studentai, 
                             const string& failoPavadinimas, 
                             bool naudotiVidurki);
+
+
+// Rusiavimo funkcijos
+bool lygintiPagalPavarde(const Studentas& a, const Studentas& b);
+bool lygintiPagalVarda(const Studentas& a, const Studentas& b);
+bool lygintiPagalVardaIrPavarde(const Studentas& a, const Studentas& b);
 
 
 // Rusiavimo klases
