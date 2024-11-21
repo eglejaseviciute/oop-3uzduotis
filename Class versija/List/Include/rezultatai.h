@@ -1,6 +1,7 @@
 #ifndef REZULTATAI_H
 #define REZULTATAI_H
 
+
 #include "myLib.h"
 
 
