@@ -28,18 +28,6 @@ public:
 };
 
 
-class PazymioSkaiciuokle {
-private:
-    bool naudotiVidurki;
-public:
-    PazymioSkaiciuokle(bool naudotiVid) : naudotiVidurki(naudotiVid) {}
-    
-    pair<Studentas, double> operator()(const Studentas& s) const {
-        return make_pair(s, skaiciuotiGalutiniBala(s, naudotiVidurki));
-    }
-};
-
-
 // Strategija 1: Du nauji konteineriai
 double rusiuotiStudentusStrategija1(const list<Studentas>& studentai, 
                                    list<Studentas>& vargsiukai, 
