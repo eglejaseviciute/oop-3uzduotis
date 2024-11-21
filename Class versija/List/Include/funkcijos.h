@@ -1,6 +1,7 @@
 #ifndef FUNKCIJOS_H
 #define FUNKCIJOS_H
 
+
 #include "myLib.h"
 #include "studentas.h"
 
