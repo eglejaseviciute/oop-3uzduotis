@@ -6,7 +6,6 @@
 #include "myLib.h"
 
 
-
 // Strukturos aprasymas studentui
 struct Studentas {
     string vardas;
