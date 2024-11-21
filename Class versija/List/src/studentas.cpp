@@ -2,9 +2,9 @@
 #include "myLib.h"
 #include "funkcijos.h"
 
-Studentas::Studentas(const std::string& vardas, const std::string& pavarde)
-    : vardas_(vardas), pavarde_(pavarde) {}
 
+Studentas::Studentas(const string& vardas, const string& pavarde)
+    : vardas_(vardas), pavarde_(pavarde) {}
 
 
 // Funkcija ivedanti studento duomenis
@@ -91,7 +91,6 @@ double Studentas::skaiciuotiGalutiniBala(bool naudotiVidurki) const {
         skaiciuotiMediana(rezultatai_.namuDarbai());
     return 0.4 * namuDarbuRezultatas + 0.6 * rezultatai_.egzaminas();
 }
-
 
 
 // Funkcija rasanti studentus i faila
