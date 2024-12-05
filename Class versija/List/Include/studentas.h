@@ -2,7 +2,7 @@
 #define STUDENTAS_H
 
 
-#include "rezultatai.h"
+#include "myLib.h"
 
 
 // Studentas klase: reprezentuoja individualu studenta
@@ -10,66 +10,63 @@ class Studentas {
 private:
     string vardas_;
     string pavarde_;
-    Rezultatai rezultatai_;
+    list<int> namuDarbai_;
+    int egzaminas_;
 
 public:
-    // Konstruktoriai
-    // Numatytasis konstruktorius
-    Studentas() = default;
-    // Konstruktorius su vardu ir pavarde
-    Studentas(const string& vardas, const string& pavarde);
+    // Konstruktorius
+    Studentas(const string& vardas = "", const string& pavarde = "") 
+        : vardas_(vardas), pavarde_(pavarde), egzaminas_(0) {}
 
-    // Destruktorius, automatiškai atlaisvina klasės išteklius
-    ~Studentas() = default;
+    // Copy konstruktorius (Rule of Three - 1)
+    Studentas(const Studentas& other) 
+        : vardas_(other.vardas_), 
+          pavarde_(other.pavarde_), 
+          namuDarbai_(other.namuDarbai_), 
+          egzaminas_(other.egzaminas_) {}
+
+    // Copy assignment operatorius (Rule of Three - 2)
+    Studentas& operator=(const Studentas& other) {
+        if (this != &other) {
+            vardas_ = other.vardas_;
+            pavarde_ = other.pavarde_;
+            namuDarbai_ = other.namuDarbai_;
+            egzaminas_ = other.egzaminas_;
+        }
+        return *this;
+    }
+
+    // Destruktorius (Rule of Three - 3)
+    ~Studentas() {
+        vardas_.clear();
+        pavarde_.clear();
+        namuDarbai_.clear();
+    }
+
 
     // Getteriai, leidzia saugiai pasiekti studento duomenis
     inline string vardas() const { return vardas_; }
     inline string pavarde() const { return pavarde_; }
-    inline const Rezultatai& rezultatai() const { return rezultatai_; }
+    inline const list<int>& namuDarbai() const { return namuDarbai_; }
+    inline int egzaminas() const { return egzaminas_; }
     
     // Setteriai, leidzia keisti studento duomenis
     void setVardas(const string& vardas) { vardas_ = vardas; }
     void setPavarde(const string& pavarde) { pavarde_ = pavarde; }
-    void setRezultatai(const Rezultatai& rezultatai) { rezultatai_ = rezultatai; }
+    void setEgzaminas(int egz) { egzaminas_ = egz; }
+    void addNamuDarbas(int pazymys) { namuDarbai_.push_back(pazymys); }
+    void clearNamuDarbai() { namuDarbai_.clear(); }
+    void setNamuDarbai(const list<int>& namuDarbai) { namuDarbai_ = namuDarbai; }
     
     // Metodai
     void ivestiStudenta(bool atsitiktiniai, int namuDarbaiKiekis);
-    void spausdintiStudenta(bool naudotiVidurki) const;
     double skaiciuotiGalutiniBala(bool naudotiVidurki) const;
-};
 
+    // Ivesties operatorius
+    friend istream& operator>>(istream& is, Studentas& studentas);
 
-// Failo rasymo funkcija
-double rasytiStudentusIFaila(const list<Studentas>& studentai, 
-                            const string& failoPavadinimas, 
-                            bool naudotiVidurki);
-
-
-// Rusiavimo funkcijos
-bool lygintiPagalPavarde(const Studentas& a, const Studentas& b);
-bool lygintiPagalVarda(const Studentas& a, const Studentas& b);
-bool lygintiPagalVardaIrPavarde(const Studentas& a, const Studentas& b);
-
-
-// Rusiavimo klases
-class RusiuotiPagalGalutiniBalaDidejanciai {
-private:
-    bool naudotiVidurki;
-public:
-    RusiuotiPagalGalutiniBalaDidejanciai(bool naudotiVid) : naudotiVidurki(naudotiVid) {}
-    bool operator()(const Studentas& a, const Studentas& b) const {
-        return a.skaiciuotiGalutiniBala(naudotiVidurki) < b.skaiciuotiGalutiniBala(naudotiVidurki);
-    }
-};
-
-class RusiuotiPagalGalutiniBalaMazejanciai {
-private:
-    bool naudotiVidurki;
-public:
-    RusiuotiPagalGalutiniBalaMazejanciai(bool naudotiVid) : naudotiVidurki(naudotiVid) {}
-    bool operator()(const Studentas& a, const Studentas& b) const {
-        return a.skaiciuotiGalutiniBala(naudotiVidurki) > b.skaiciuotiGalutiniBala(naudotiVidurki);
-    }
+    // Isvesties operatorius 
+    friend ostream& operator<<(ostream& os, const Studentas& studentas);
 };
 
 
