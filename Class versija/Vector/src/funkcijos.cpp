@@ -43,116 +43,65 @@ char gautiTinkamaSymboli(const string &pranesimas, const string &tinkamisymbolia
 
 // Funkcija generuojanti atsitiktinius rezultatus studentui
 void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis) {
-    Rezultatai naujiRezultatai;
-    naujiRezultatai.clearNamuDarbai();
+    studentas.clearNamuDarbai();
     
     for (int i = 0; i < namuDarbaiKiekis; ++i) {
-        naujiRezultatai.addNamuDarbas(rand() % 11);
+        studentas.addNamuDarbas(rand() % 11);
     }
-    naujiRezultatai.setEgzaminas(rand() % 11);
+    studentas.setEgzaminas(rand() % 11);
     
-    studentas.setRezultatai(naujiRezultatai);
 }
 
 
 // Funkcija nuskaitanti duomenis is failo
 double nuskaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai) {
     auto start = std::chrono::high_resolution_clock::now();
-    while (true) {
-        ifstream failas(failoPavadinimas);
-        if (!failas) {
-            throw runtime_error("Klaida! Nepavyko atidaryti failo: " + failoPavadinimas);
-        }
 
-        string line;
-        getline(failas, line);
-
-        int lineNumber = 1;
-        while (getline(failas, line)) {
-            lineNumber++;
-            Studentas studentas;
-            stringstream ss(line);
-
-            string vardas, pavarde;
-            if (!(ss >> vardas >> pavarde)) {
-                cout << "Klaida eiluteje " << lineNumber << "! Nepavyko nuskaityti vardo ir pavardes." << endl;
-                continue;
-            }
-
-            studentas.setVardas(vardas);
-            studentas.setPavarde(pavarde);
-
-            Rezultatai rezultatai;
-            vector<int> namuDarbai;
-            string input;
-            int nd;
-            bool egzaminasNuskaitytas = false;
-
-            while (ss >> input) {
-                try {
-                    nd = stoi(input);
-                    if (nd < 0 || nd > 10) {
-                        throw out_of_range("Rezultatas ne intervale [0, 10]");
-                    }
-                    if (!egzaminasNuskaitytas) {
-                        namuDarbai.push_back(nd);
-                    } else {
-                        cout << "Klaida eiluteje " << lineNumber << "! Po egzamino rezultato aptikti papildomi duomenys." << endl;
-                        break;
-                    }
-                } catch (const invalid_argument&) {
-                    cout << "Klaida eiluteje " << lineNumber << "! Netinkamas simbolis '" << input << "' studentui(-ei): " 
-                         << studentas.vardas() << " " << studentas.pavarde() << "." << endl;
-                    cout << "Iveskite tinkama rezultata (skaicius nuo 0 iki 10): ";
-                    while (!(cin >> nd) || nd < 0 || nd > 10) {
-                        cout << "Klaida! Iveskite skaiciu tarp 0 ir 10: ";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    }
-                    namuDarbai.push_back(nd);
-                } catch (const out_of_range&) {
-                    cout << "Klaida eiluteje " << lineNumber << "! Rezultatas '" << input << "' ne intervale [0, 10] studentui(-ei): " 
-                         << studentas.vardas() << " " << studentas.pavarde() << "." << endl;
-                    cout << "Iveskite tinkama rezultata (skaicius nuo 0 iki 10): ";
-                    while (!(cin >> nd) || nd < 0 || nd > 10) {
-                        cout << "Klaida! Iveskite skaiciu tarp 0 ir 10: ";
-                        cin.clear();
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    }
-                    namuDarbai.push_back(nd);
-                }
-            }
-
-            if (namuDarbai.empty()) {
-                cout << "Klaida eiluteje " << lineNumber << "! Nerasta namu darbu rezultatu studentui(-ei): " 
-                     << studentas.vardas() << " " << studentas.pavarde() << "." << endl;
-                continue;
-            }
-
-            rezultatai.setEgzaminas(namuDarbai.back());
-            namuDarbai.pop_back();
-            rezultatai.setNamuDarbai(namuDarbai);
-
-            if (namuDarbai.empty()) {
-                cout << "Klaida eiluteje " << lineNumber << "! Nerasta namu darbu rezultatu studentui(-ei): " 
-                     << studentas.vardas() << " " << studentas.pavarde() << " (tik egzamino rezultatas)." << endl;
-                continue;
-            }
-
-            studentas.setRezultatai(rezultatai);
-            studentai.push_back(studentas);
-        }
-
-        failas.close();
-        break; 
+    ifstream failas(failoPavadinimas);
+    if (!failas) {
+        throw runtime_error("Klaida! Nepavyko atidaryti failo: " + failoPavadinimas);
     }
+
+    string line;
+    getline(failas, line); // Praleidziame pirma eilute (antraste)
+
+    int lineNumber = 1;
+    while (getline(failas, line)) {
+        lineNumber++;
+        stringstream ss(line);
+        try {
+            Studentas studentas;
+            ss >> studentas; // naudojamas operatorius>> studento duomenims nuskaityti
+            studentai.push_back(studentas);
+        } catch (const runtime_error& e) {
+            cout << "Klaida eiluteje " << lineNumber << ": " << e.what() << endl;
+        }
+    }
+
+    failas.close();
+
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> diff = end - start;
     double readingTime = diff.count();
-    
+
     veikimoGreicioRezultatai[failoPavadinimas].setSkaitymoLaikas(readingTime);
-    
+
     return readingTime;
+}
+
+
+bool lygintiPagalPavarde(const Studentas& a, const Studentas& b) {
+    return a.pavarde() < b.pavarde();
+}
+
+
+bool lygintiPagalVarda(const Studentas& a, const Studentas& b) {
+    return a.vardas() < b.vardas();
+}
+
+
+bool lygintiPagalVardaIrPavarde(const Studentas& a, const Studentas& b) {
+    return (a.vardas() + a.pavarde()) < (b.vardas() + b.pavarde());
 }
 
 
@@ -172,7 +121,7 @@ double generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &f
     failas << "Egz." << endl;
 
     for (int i = 1; i <= studentuKiekis; ++i) {
-        failas << left << setw(20) << "Vardas" + to_string(i) 
+        failas << left << setw(20) << "Vardas" + to_string(i)
                << setw(20) << "Pavarde" + to_string(i);
         
         for (int j = 0; j < namuDarbaiKiekis; ++j) {
@@ -195,6 +144,34 @@ double generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &f
 }
 
 
+// Funkcija rasanti studentus i faila
+double rasytiStudentusIFaila(const vector<Studentas>& studentai,
+                            const string& failoPavadinimas,
+                            bool naudotiVidurki) {
+    auto start = std::chrono::high_resolution_clock::now();
+    ofstream outputFile(failoPavadinimas); 
+
+    if (!outputFile) {
+        throw runtime_error("Nepavyko atidaryti failo: " + failoPavadinimas);
+    }
+
+    outputFile << left << setw(18) << "Vardas" << setw(18) << "Pavarde"
+              << (naudotiVidurki ? "Galutinis (Vid.)" : "Galutinis (Med.)") << endl;
+    outputFile << string(60, '-') << endl;
+
+    for (const auto& studentas : studentai) {
+        outputFile << studentas;  // operator<<
+        double galutinis = studentas.skaiciuotiGalutiniBala(naudotiVidurki);
+        outputFile << fixed << setprecision(2) << galutinis << endl; 
+    }
+
+    outputFile.close();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> diff = end - start;
+    return diff.count();
+}
+
+
 // Funkcija rezultatu rodymui ekrane
 void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
     cout << "\n" << endl;
@@ -205,11 +182,10 @@ void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
     cout << string(83, '-') << endl;
 
     for (const auto& studentas : studentai) {
+        cout << studentas; // operator<<
+        cout << setw(25) << &studentas;
         double galutinis = studentas.skaiciuotiGalutiniBala(naudotiVidurki);
-        cout << left << setw(18) << studentas.vardas()
-             << setw(22) << studentas.pavarde()
-             << setw(25) << &studentas
-             << fixed << setprecision(2) << galutinis << endl;
+        cout << fixed << setprecision(2) << galutinis << endl;
     }
 }
 
@@ -217,13 +193,14 @@ void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
 // Funkcija greicio rezultatu rodymui
 void rodytiGreicioAnalizesRezultatus(const string& failoPavadinimas) {
     const auto& rezultatai = veikimoGreicioRezultatai[failoPavadinimas];
+    cout << fixed << setprecision(8);
     cout << "\nGreicio analizes rezultatai failui: " << failoPavadinimas << endl;
     cout << "- Failo skaitymo laikas: " << rezultatai.getSkaitymoLaikas() << " sekundziu" << endl;
     cout << "- Rusiavimo i dvi grupes laikas: " << rezultatai.getRusiavimoLaikas() << " sekundziu" << endl;
     cout << "- Rasymo laikas (vargsiukai): " << rezultatai.getRasymoLaikasVargsiukai() << " sekundziu" << endl;
     cout << "- Rasymo laikas (galvociai): " << rezultatai.getRasymoLaikasGalvociai() << " sekundziu" << endl;
     
-    double bendrasLaikas = rezultatai.getSkaitymoLaikas() + rezultatai.getRusiavimoLaikas() + 
+    double bendrasLaikas = rezultatai.getSkaitymoLaikas() + rezultatai.getRusiavimoLaikas() +
                           rezultatai.getRasymoLaikasVargsiukai() + rezultatai.getRasymoLaikasGalvociai();
     cout << "Bendras laikas: " << bendrasLaikas << " sekundziu" << endl;
 }
@@ -388,8 +365,8 @@ void greicioAnalize() {
         veikimoGreicioRezultatai[failoPavadinimas].setRasymoLaikasVargsiukai(rasymoLaikasVargsiukai);
         veikimoGreicioRezultatai[failoPavadinimas].setRasymoLaikasGalvociai(rasymoLaikasGalvociai);
 
-        cout << "\nStudentai buvo surusiuoti ir irasyti i failus '" 
-             << vargsiukaiFailoPavadinimas << "' ir '" 
+        cout << "\nStudentai buvo surusiuoti ir irasyti i failus '"
+             << vargsiukaiFailoPavadinimas << "' ir '"
              << galvociaiFailoPavadinimas << "'." << endl;
 
         apdorotiFailai.push_back(failoPavadinimas);
@@ -413,7 +390,18 @@ void greicioAnalize() {
         bendrasLaikas += rezultatai.getSkaitymoLaikas() + rezultatai.getRusiavimoLaikas() + rezultatai.getRasymoLaikasVargsiukai() + rezultatai.getRasymoLaikasGalvociai();
     }
 
+    cout << fixed << setprecision(8);
     double vidutinisLaikas = bendrasLaikas / apdorotiFailai.size();
     cout << "Vidutinis laikas visiems apdorotiems failams: " << vidutinisLaikas << " sekundziu" << endl;
     }
+}
+
+
+void RuleOfThreeDemonstravimas () {
+    Studentas a;
+    cin >> a;
+    Studentas b;
+    b = a;
+    Studentas c(b);
+    cout << a << "\n" << b << "\n" << c << endl;
 }
