@@ -193,7 +193,7 @@ void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
 // Funkcija greicio rezultatu rodymui
 void rodytiGreicioAnalizesRezultatus(const string& failoPavadinimas) {
     const auto& rezultatai = veikimoGreicioRezultatai[failoPavadinimas];
-    cout << fixed << setprecision(7);
+    cout << fixed << setprecision(8);
     cout << "\nGreicio analizes rezultatai failui: " << failoPavadinimas << endl;
     cout << "- Failo skaitymo laikas: " << rezultatai.getSkaitymoLaikas() << " sekundziu" << endl;
     cout << "- Rusiavimo i dvi grupes laikas: " << rezultatai.getRusiavimoLaikas() << " sekundziu" << endl;
@@ -390,7 +390,7 @@ void greicioAnalize() {
         bendrasLaikas += rezultatai.getSkaitymoLaikas() + rezultatai.getRusiavimoLaikas() + rezultatai.getRasymoLaikasVargsiukai() + rezultatai.getRasymoLaikasGalvociai();
     }
 
-    cout << fixed << setprecision(7);
+    cout << fixed << setprecision(8);
     double vidutinisLaikas = bendrasLaikas / apdorotiFailai.size();
     cout << "Vidutinis laikas visiems apdorotiems failams: " << vidutinisLaikas << " sekundziu" << endl;
     }
@@ -404,23 +404,4 @@ void RuleOfThreeDemonstravimas () {
     b = a;
     Studentas c(b);
     cout << a << "\n" << b << "\n" << c << endl;
-}
-
-
-void abstrakciosKlasesZmogusDemonstravimas() {
-    cout << "\n";
-    
-    // Bandyti sukurti tiesiogini Zmogaus objekta yra neimanoma, nes klase abstrakti:
-    //Zmogus zmogus;  // Sukelia kompiliavimo klaida
-    
-    // Sukuriamas Zmogaus tipo rodykles objektas, kuris rodo i Studento objekta
-    Zmogus* zmogus = new Studentas("Vardas", "Pavardenis");
-
-    // Isvedami vardo ir pavardes duomenys naudojant getterius
-    cout << zmogus->vardas() << " " << zmogus->pavarde() << endl;
-    
-    // Iskvieciamas virtualus metodas
-    zmogus->spausdintiInformacija();
-
-    delete zmogus;
 }
