@@ -20,11 +20,15 @@ int main() {
             "* juos ivesti patiems (i)\n"
             "* atlikti veikimo greicio analize (a)\n"
             "* pademonstruoti 'Rule of three' veikima (p)\n"
-            "(Iveskite 'g', 'f', 'i', 'a' arba 'p'!): ",
-            "'g', 'f', 'i', 'a' arba 'p'!\n");
+            "* pademonstruoti abstrakcios klases 'Zmogus' veikima (z)\n"
+            "(Iveskite 'g', 'f', 'i', 'a', 'p' arba 'z'!): ",
+            "'g', 'f', 'i', 'a', 'p' arba 'z'!\n");
 
             if(pasirinkimas == 'p') {
                 RuleOfThreeDemonstravimas();
+            } 
+            else if(pasirinkimas == 'z') {
+                abstrakciosKlasesZmogusDemonstravimas();
             } 
             else if(pasirinkimas == 'a') {
                 greicioAnalize();
