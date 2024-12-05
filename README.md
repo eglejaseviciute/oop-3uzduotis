@@ -1,11 +1,5 @@
 # Objektinis programavimas (2-oji užduotis)
 ## **Programos versijų aprašymas**
-* ### v1.5
-  * Vietoje turimos vienos Studentas klasės sukurtos dvi:
-     * bazinė (abstrakti) klasė, skirtą bendrai aprašyti žmogų;
-     * išvestinė (derived) klasę iš bazinės - Studentas.
-  * Žmogui skirta bazinė klasė padaryta kaip abstrakčioji klasė, t.y., nėra galima sukurti zmogus tipo objektų, o tik objektus gautus iš jos išvestinių klasių.
-
 
 * ### v1.2
   * Realizuoti visi reikiami ***"Rule of three"*** ir ***įvesties/išvesties operatoriai*** turimai Studentas klasei.
