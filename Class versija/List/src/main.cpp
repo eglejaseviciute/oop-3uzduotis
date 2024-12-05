@@ -16,13 +16,17 @@ int main() {
             pasirinkimas = gautiTinkamaSymboli(
             "Pasirinkite:\n"
             "* generuoti failus (g)\n"
-            "* nuskaityti duomenis iš failo (f)\n"
+            "* nuskaityti duomenis is failo (f)\n"
             "* juos ivesti patiems (i)\n"
             "* atlikti veikimo greicio analize (a)\n"
-            "(Iveskite 'g', 'f', 'i' arba 'a'!): ",
-            "'g', 'f', 'i' arba 'a'!\n");
+            "* pademonstruoti 'Rule of three' veikima (p)\n"
+            "(Iveskite 'g', 'f', 'i', 'a' arba 'p'!): ",
+            "'g', 'f', 'i', 'a' arba 'p'!\n");
 
-            if(pasirinkimas == 'a') {
+            if(pasirinkimas == 'p') {
+                RuleOfThreeDemonstravimas();
+            } 
+            else if(pasirinkimas == 'a') {
                 greicioAnalize();
             }
             else if (pasirinkimas == 'g') {
