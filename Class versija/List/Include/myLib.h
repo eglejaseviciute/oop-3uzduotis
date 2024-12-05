@@ -49,6 +49,10 @@ using std::make_pair;
 using std::list;
 using std::advance;
 using std::move;
+using std::ostream;
+using std::istream;
+using std::ios;
+using std::cerr;
 
 
 #endif // MYLIB_H
