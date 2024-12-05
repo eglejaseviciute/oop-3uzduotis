@@ -1,8 +1,19 @@
 # Objektinis programavimas (2-oji užduotis)
 ## **Programos versijų aprašymas**
 
-* ### v1.1
+* ### v1.2
+  * Realizuoti visi reikiami ***"Rule of three"*** ir ***įvesties/išvesties operatoriai*** turimai Studentas klasei.
+     * Įvesties operatorius:
+       * nuskaito ***naudotojo įvestus*** duomenis: studentų vardus, pavardes, namų darbų bei egzamino rezultatus;
+       * nuskaito duomenis iš ***.txt failo***.
+     * Išvesties operatorius:
+       * išveda rezultatus ***į ekraną***: studentų vardus ir pavardes.
+  * Atlikta greičio analizė klasei su įvesties/išvesties operatoriais ir klasei be įvesties/išvesties operatorių pagal kompiliatoriaus -O3 optimizavimo lygį, naudojant fiksuotą konteinerį - vektorių ir greičiausią rūšiavimo strategiją (3 strategiją).
 
+<img width="923" alt="Analize" src="https://github.com/user-attachments/assets/a2ecc0e5-c907-4f5c-bbaf-c66aa9111e44">
+
+
+* ### v1.1
   * Ankstesnės atliktos užduoties pagrindu sukurta nauja repozitorija ***oop-2uzduotis***, kurioje išliko ***commit***'ų ir ***tag***'ų istorija.
   * Ankstesnės programos versijos, naudojančios struct'ūras, ***pakeistos į class'es***. Taip pat pridėtas testavimas su ***-O1***, ***-O2***, ***-O3*** kompiliatoriaus optimizacijos lygiais.
     Šios programos versijos dabar talpinamos ***Class versija*** direktorijoje.
