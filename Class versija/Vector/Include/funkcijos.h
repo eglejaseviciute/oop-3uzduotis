@@ -44,11 +44,38 @@ double skaiciuotiMediana(vector<int> namuDarbai);
 char gautiTinkamaSymboli(const string &pranesimas, const string &tinkamisymboliai);
 void generuotiRezultatus(Studentas &studentas, int namuDarbaiKiekis);
 double nuskaitytiDuomenisIsFailo(const string& failoPavadinimas, vector<Studentas>& studentai);
+bool lygintiPagalPavarde(const Studentas& a, const Studentas& b);
+bool lygintiPagalVarda(const Studentas& a, const Studentas& b);
+bool lygintiPagalVardaIrPavarde(const Studentas& a, const Studentas& b);
 double generuotiFailus(int studentuKiekis, int namuDarbaiKiekis, const string &filePrefix);
+double rasytiStudentusIFaila(const vector<Studentas>& studentai, const string& failoPavadinimas, bool naudotiVidurki);
 void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki);
 void rodytiGreicioAnalizesRezultatus(const string& failoPavadinimas);
 void failuApdorojimoCiklas();
 void greicioAnalize();
+void RuleOfThreeDemonstravimas();
+
+
+// Rusiavimo klases
+class RusiuotiPagalGalutiniBalaDidejanciai {
+private:
+    bool naudotiVidurki;
+public:
+    RusiuotiPagalGalutiniBalaDidejanciai(bool naudotiVid) : naudotiVidurki(naudotiVid) {}
+    bool operator()(const Studentas& a, const Studentas& b) const {
+        return a.skaiciuotiGalutiniBala(naudotiVidurki) < b.skaiciuotiGalutiniBala(naudotiVidurki);
+    }
+};
+
+class RusiuotiPagalGalutiniBalaMazejanciai {
+private:
+    bool naudotiVidurki;
+public:
+    RusiuotiPagalGalutiniBalaMazejanciai(bool naudotiVid) : naudotiVidurki(naudotiVid) {}
+    bool operator()(const Studentas& a, const Studentas& b) const {
+        return a.skaiciuotiGalutiniBala(naudotiVidurki) > b.skaiciuotiGalutiniBala(naudotiVidurki);
+    }
+};
 
 
 #endif // FUNKCIJOS_H
