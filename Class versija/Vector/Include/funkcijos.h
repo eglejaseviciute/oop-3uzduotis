@@ -54,6 +54,7 @@ void rodytiGreicioAnalizesRezultatus(const string& failoPavadinimas);
 void failuApdorojimoCiklas();
 void greicioAnalize();
 void RuleOfThreeDemonstravimas();
+void abstrakciosKlasesZmogusDemonstravimas();
 
 
 // Rusiavimo klases
