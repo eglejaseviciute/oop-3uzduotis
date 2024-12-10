@@ -147,8 +147,10 @@ istream& operator>>(istream& is, Studentas& studentas) {
 
 
 ostream& operator<<(ostream& os, const Studentas& studentas) {
+    double galutinis = studentas.skaiciuotiGalutiniBala("v");
     os << left << setw(18) << studentas.vardas()
-       << setw(22) << studentas.pavarde();
+       << setw(22) << studentas.pavarde()
+       << fixed << setprecision(2) << galutinis << endl;
 
     return os;
 }
