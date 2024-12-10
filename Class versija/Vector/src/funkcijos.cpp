@@ -161,8 +161,6 @@ double rasytiStudentusIFaila(const vector<Studentas>& studentai,
 
     for (const auto& studentas : studentai) {
         outputFile << studentas;  // operator<<
-        double galutinis = studentas.skaiciuotiGalutiniBala(naudotiVidurki);
-        outputFile << fixed << setprecision(2) << galutinis << endl; 
     }
 
     outputFile.close();
@@ -182,10 +180,11 @@ void rodytiRezultatus(const vector<Studentas>& studentai, bool naudotiVidurki) {
     cout << string(83, '-') << endl;
 
     for (const auto& studentas : studentai) {
-        cout << studentas; // operator<<
-        cout << setw(25) << &studentas;
         double galutinis = studentas.skaiciuotiGalutiniBala(naudotiVidurki);
-        cout << fixed << setprecision(2) << galutinis << endl;
+        cout << left << setw(18) << studentas.vardas()
+             << setw(22) << studentas.pavarde()
+             << setw(25) << &studentas //adresas atmintyje
+             << fixed << setprecision(2) << galutinis << endl;
     }
 }
 
