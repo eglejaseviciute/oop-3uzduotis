@@ -3,7 +3,8 @@
 
 * ### v2.0
   * Sukurta ***projekto dokumentacija*** panaudojant ***Doxygen*** (įkelta kaip atskiras doxygen HTML katalogas į GitHub).
-  * Sukurtas ir dokumentacijos PDF failas: 
+  * Sukurtas dokumentacijos PDF failas, naudojantis ***Latex***: [v2.0_projektas.pdf](https://github.com/user-attachments/files/18100240/v2.0_projektas.pdf)
+
   * Realizuoti ***Unit Testai*** naudojant ***Google Test*** framework'ą.
 
 
@@ -169,11 +170,15 @@ Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirink
 
 6. Jei pasirenka ***'p'*** raidė - ***pademonstruoti 'Rule of three' veikimą***:
    * programa paprašys įvesti studento vardą, tuomet pavardę;
-   * tada reikės įvesti namų darbų rezultatus. Po kiekvieno rezultato reikės paspausti **ENTER**. Norint užbaigti namų darbų rezultatų įvedimą reikės du kartus paspausti **ENTER**.
+   * tada reikės įvesti namų darbų rezultatus. Po kiekvieno rezultato reikės paspausti **ENTER**. Norint užbaigti namų darbų rezultatų įvedimą reikės du kartus paspausti **ENTER**;
    * ir galiausiai programa paprašys įvesti egzamino rezultatą.
-  
+
+Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirinkti kitą funkciją. Jei pasirenkama "Taip" (ekrane įvedama raidė 't') grįžtama į pagrindinį meniu, jei pasirenkama "NE" (ekrane įvedama raidė 'n') - programa baigia darbą.
+
 7. Jei pasirenka ***'z'*** raidė - ***pademonstruoti abstrakčios klasės 'Zmogus' veikimą***:
-   * Šis pasirinkimas parodys Zmogus klasės objektų kūrimą.
+   * šis pasirinkimas parodys Zmogus klasės objektų kūrimą.
+  
+Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirinkti kitą funkciją. Jei pasirenkama "Taip" (ekrane įvedama raidė 't') grįžtama į pagrindinį meniu, jei pasirenkama "NE" (ekrane įvedama raidė 'n') - programa baigia darbą.
 
 #
 ## Kompiuteris ***(testavimo sistemos parametrai)***:
