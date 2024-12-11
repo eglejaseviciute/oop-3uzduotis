@@ -1,11 +1,18 @@
 # Objektinis programavimas (2-oji užduotis)
-## **Programos versijų aprašymas**
+## Programos versijų aprašymas
+
+* ### v2.0
+  * Sukurta ***projekto dokumentacija*** panaudojant ***Doxygen*** (įkelta kaip atskiras doxygen HTML katalogas).
+  * Sukurtas ir dokumentacijos PDF failas: 
+  * Realizuoti ***Unit Testai*** naudojant ***Google Test*** framework'ą.
+
 
 * ### v1.5
   * Vietoje turimos vienos Studentas klasės sukurtos dvi:
      * ***bazinė (abstrakti)*** klasė, skirta bendrai aprašyti žmogų;
      * ***išvestinė (derived)*** klasė iš bazinės - Studentas.
   * Žmogui skirta bazinė klasė padaryta kaip abstrakčioji klasė, t.y., nėra galima sukurti zmogus tipo objektų, o tik objektus gautus iš jos išvestinių klasių.
+
 
 * ### v1.2
   * Realizuoti visi reikiami ***"Rule of three"*** ir ***įvesties/išvesties operatoriai*** turimai Studentas klasei.
@@ -28,18 +35,31 @@
 <img width="850" alt="Analize" src="https://github.com/user-attachments/assets/379af23c-dda5-4154-9058-a04d39a8c859">
 
 
-# Objektinis programavimas (1-oji užduotis)
-## Programos versijų aprašymas
-* ### v.pradinė
-  * Nuskaito ***naudotojo įvestus*** duomenis: studentų vardus, pavardes, namų darbų bei egzamino rezultatus;
-  * ***Atsitiktinai generuoja*** rezultatus, jei to pageidaujama;
-  * Suskaičiuoja galutinį rezultatą pagal formulę: ***galutinis = 0,4 * namų darbų vidurkis arba mediana + 0,6 * egzaminas***.
-* ### v0.1
-  * Pridėta galimybė nuskaityti duomenis iš ***.txt failo***;
-  * Pridėtas studentų ***rūšiavimas*** pagal ***vardus*** ir, jei reikia, pagal ***pavardes***;
-  * Kur tikslinga, programoje panaudotos ***struct'ūros***;
-  * Pridėta daugiau ***išimčių valdymo*** (angl. Exception Handling);
-  * Programa išskirstyta į atskirus ****.cpp*** ir ****.h*** failus.
+* ### v1.0
+  * ***Optimizuotas studentų rūšiavimas į dvi kategorijas*** ("vargsiuku" ir "galvociu"): t.y., konteinerių tipams (vector ir list) ***atlikta strategijų analizė*** priklausomai nuo studentų dalijimo į dvi kategorijas:
+    - ***1 strategija***: Bendro ***"studentai" konteinerio*** (vector arba list) ***skaidymas*** (rūšiavimas) ***į du naujus to paties tipo konteinerius***: "vargsiukai" ir "galvociai". Tokiu būdu tas pats studentas yra dviejuose konteineriuose: bendrame "studentai" ir viename iš suskaidytų ("vargsiukai" arba "galvociai");
+    - ***2 strategija***: Bendro ***"studentai" konteinerio*** (vector arba list) ***skaidymas*** (rūšiavimas) panaudojant tik ***vieną naują konteinerį***: "vargsiukai". Tokiu būdu, jei studentas yra "vargšiukas", jį turime įkelti į naująjį "vargsiukai" konteinerį ir ištrinti iš bendro "studentai" konteinerio. Po šio žingsnio "studentai" konteineryje liks vien tik "galvociai";
+    - ***3 strategija***: Bendro ***"studentai" konteinerio*** (vector arba list) ***skaidymas*** (rūšiavimas) ***panaudojant 2 strategiją*** ir įtraukiant į ją ***efektyvius*** darbo su konteineriais ***metodus*** (algoritmus):
+      -  std::stable_partition;
+      -  std::remove_if;
+      -  std::iota;
+      -  std::splice.
+        
+<img width="1030" alt="Greiciai" src="https://github.com/user-attachments/assets/b3ba2924-7b97-44f0-9668-38188789b750">
+
+
+* ### v0.3
+  * Sukurta alternatyvi programos versija, kur vietoj ***std::vector*** studentų duomenims saugoti naudojama ***std::list***;
+  * * List ir Vector konteinerių atveju ***rankinio įvedimo metu ekrane*** be studento duomenų išvedamas ***objekto*** saugojimo ***atmintyje adresas***;
+  * Atlikta ***programos veikimo greičio analizė*** priklausomai nuo naudojamo vieno iš ***dviejų konteinerių***:
+    - std::vector,
+    - std::list.
+
+<img width="799" alt="Greicio analize (vector)" src="https://github.com/user-attachments/assets/0ecaa00c-35b2-430c-8069-30432c1fb672">
+
+<img width="799" alt="Greicio analize (list) copy" src="https://github.com/user-attachments/assets/cecfe982-8746-47d6-9967-e69780f84e9f">
+
+
 * ### v0.2
   * Pridėta galimybė ***generuoti penkis*** atsitiktinius studentų sąrašų ***failus***, sudarytus iš: 1 000, 10 000, 100 000, 1 000 000, 10 000 000 įrašų. Vardai ir Pavardės generuojami "šabloniniai", pvz.: Vardas1 Pavarde1, Vardas2 Pavarde2 ir t.t.;
   * Studentai rūšiuojami į dvi kategorijas:
@@ -55,29 +75,18 @@
 <img width="799" alt="analize" src="https://github.com/user-attachments/assets/7a704ec5-403b-4f22-8586-d9b313bb4d5e">
 
 
-* ### v0.3
-  * Sukurta alternatyvi programos versija, kur vietoj ***std::vector*** studentų duomenims saugoti naudojama ***std::list***;
-  * * List ir Vector konteinerių atveju ***rankinio įvedimo metu ekrane*** be studento duomenų išvedamas ***objekto*** saugojimo ***atmintyje adresas***;
-  * Atlikta ***programos veikimo greičio analizė*** priklausomai nuo naudojamo vieno iš ***dviejų konteinerių***:
-    - std::vector,
-    - std::list.
+* ### v0.1
+  * Pridėta galimybė nuskaityti duomenis iš ***.txt failo***;
+  * Pridėtas studentų ***rūšiavimas*** pagal ***vardus*** ir, jei reikia, pagal ***pavardes***;
+  * Kur tikslinga, programoje panaudotos ***struct'ūros***;
+  * Pridėta daugiau ***išimčių valdymo*** (angl. Exception Handling);
+  * Programa išskirstyta į atskirus ****.cpp*** ir ****.h*** failus.
 
-<img width="799" alt="Greicio analize (vector)" src="https://github.com/user-attachments/assets/0ecaa00c-35b2-430c-8069-30432c1fb672">
 
-<img width="799" alt="Greicio analize (list) copy" src="https://github.com/user-attachments/assets/cecfe982-8746-47d6-9967-e69780f84e9f">
-
-* ### v1.0
-  * ***Optimizuotas studentų rūšiavimas į dvi kategorijas*** ("vargsiuku" ir "galvociu"): t.y., konteinerių tipams (vector ir list) ***atlikta strategijų analizė*** priklausomai nuo studentų dalijimo į dvi kategorijas:
-    - ***1 strategija***: Bendro ***"studentai" konteinerio*** (vector arba list) ***skaidymas*** (rūšiavimas) ***į du naujus to paties tipo konteinerius***: "vargsiukai" ir "galvociai". Tokiu būdu tas pats studentas yra dviejuose konteineriuose: bendrame "studentai" ir viename iš suskaidytų ("vargsiukai" arba "galvociai");
-    - ***2 strategija***: Bendro ***"studentai" konteinerio*** (vector arba list) ***skaidymas*** (rūšiavimas) panaudojant tik ***vieną naują konteinerį***: "vargsiukai". Tokiu būdu, jei studentas yra "vargšiukas", jį turime įkelti į naująjį "vargsiukai" konteinerį ir ištrinti iš bendro "studentai" konteinerio. Po šio žingsnio "studentai" konteineryje liks vien tik "galvociai";
-    - ***3 strategija***: Bendro ***"studentai" konteinerio*** (vector arba list) ***skaidymas*** (rūšiavimas) ***panaudojant 2 strategiją*** ir įtraukiant į ją ***efektyvius*** darbo su konteineriais ***metodus*** (algoritmus):
-      -  std::stable_partition;
-      -  std::remove_if;
-      -  std::iota;
-      -  std::splice.
-        
-<img width="1030" alt="Greiciai" src="https://github.com/user-attachments/assets/b3ba2924-7b97-44f0-9668-38188789b750">
-
+* ### v.pradinė
+  * Nuskaito ***naudotojo įvestus*** duomenis: studentų vardus, pavardes, namų darbų bei egzamino rezultatus;
+  * ***Atsitiktinai generuoja*** rezultatus, jei to pageidaujama;
+  * Suskaičiuoja galutinį rezultatą pagal formulę: ***galutinis = 0,4 * namų darbų vidurkis arba mediana + 0,6 * egzaminas***.
 
 
 #
@@ -87,6 +96,12 @@
   3. Taip pat savo kompiuteryje reikia ***įsijungti "Terminal"*** ir pirmiausia ***įvesti kelią iki direktorijos***, kuri buvo parsiųsta: "cd "čia įrašyti kelią iki direktorijos"", tuomet paspausti "Enter" ir ***įvesti "./run.sh"*** (jei nesuveiktų "./run.sh", prieš "./run.sh" reiktų dar suvesti "chmod +x run.sh").
   4. Po "./run.sh" paleidomo - ***programa terminale pasileis***. 
   5. Pakartotiniam programos paleidimui terminale vėl reikės ***įvesti kelią iki direktorijos*** ir vietoj "./run.sh", gelėsite įvesti ***"/v1.0_vector"*** (std::vector atveju) arba ***"./v1.0_list"*** (std::list atveju).
+
+#
+## Unit Testų paleidimo instrukcija
+  1. Pirmiausia reikia ***parsisiųsti ir įsidiegti Google Test ir Homebrew paketą*** į kompiuterį.
+  2. Tuomet reikia ***parsisiųsti "unitTest.cpp" failą***.
+  3.  Taip pat savo kompiuteryje reikia ***įsijungti "Terminal"*** ir pirmiausia ***įvesti kelią iki direktorijos***, į kurią parsisiuntėte "unitTest.cpp" failą: "cd "čia įrašyti kelią iki direktorijos"", tuomet paspausti "Enter" ir ***įvesti šią eilutę: "clang++ -std=c++14 -isystem /opt/homebrew/include -L/opt/homebrew/lib -lgtest -lgtest_main -pthread unitTest.cpp -o runTests"***.
 
 # 
 ## Naudojimosi programa instrukcija
@@ -151,6 +166,14 @@ Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirink
     * jei pasirenkama "Palyginti visas strategijas", programa parodys visų ***strategijų rūšiavimo rezultatus***, bei ***užimamos atminties dydį***.
 
 Galiausiai programa paklaus, ar norima grįžti į pagrindinį meniu ir pasirinkti kitą funkciją. Jei pasirenkama "Taip" (ekrane įvedama raidė 't') grįžtama į pagrindinį meniu, jei pasirenkama "NE" (ekrane įvedama raidė 'n') - programa baigia darbą.
+
+6. Jei pasirenka ***'p'*** raidė - ***pademonstruoti 'Rule of three' veikimą***:
+   * programa paprašys įvesti studento vardą, tuomet pavardę;
+   * tada reikės įvesti namų darbų rezultatus. Po kiekvieno rezultato reikės paspausti **ENTER**. Norint užbaigti namų darbų rezultatų įvedimą reikės du kartus paspausti **ENTER**.
+   * ir galiausiai programa paprašys įvesti egzamino rezultatą.
+  
+7. Jei pasirenka ***'z'*** raidė - ***pademonstruoti abstrakčios klasės 'Zmogus' veikimą***:
+   * Šis pasirinkimas parodys Zmogus klasės objektų kūrimą.
 
 #
 ## Kompiuteris ***(testavimo sistemos parametrai)***:
