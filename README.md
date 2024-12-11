@@ -2,7 +2,7 @@
 ## Programos versijų aprašymas
 
 * ### v2.0
-  * Sukurta ***projekto dokumentacija*** panaudojant ***Doxygen*** (įkelta kaip atskiras doxygen HTML katalogas).
+  * Sukurta ***projekto dokumentacija*** panaudojant ***Doxygen*** (įkelta kaip atskiras doxygen HTML katalogas į GitHub).
   * Sukurtas ir dokumentacijos PDF failas: 
   * Realizuoti ***Unit Testai*** naudojant ***Google Test*** framework'ą.
 
@@ -50,7 +50,7 @@
 
 * ### v0.3
   * Sukurta alternatyvi programos versija, kur vietoj ***std::vector*** studentų duomenims saugoti naudojama ***std::list***;
-  * * List ir Vector konteinerių atveju ***rankinio įvedimo metu ekrane*** be studento duomenų išvedamas ***objekto*** saugojimo ***atmintyje adresas***;
+  * List ir Vector konteinerių atveju ***rankinio įvedimo metu ekrane*** be studento duomenų išvedamas ***objekto*** saugojimo ***atmintyje adresas***;
   * Atlikta ***programos veikimo greičio analizė*** priklausomai nuo naudojamo vieno iš ***dviejų konteinerių***:
     - std::vector,
     - std::list.
