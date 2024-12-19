@@ -1,4 +1,4 @@
-# Objektinis programavimas (2-oji užduotis)
+# Objektinis programavimas (3-oji užduotis)
 
 ## Programos įdiegimo su su v3.0_setup.exe ir išdiegimo instrukcija
  * ***Įdiegimas:***
