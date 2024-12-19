@@ -1,5 +1,19 @@
 # Objektinis programavimas (2-oji užduotis)
+
+## Programos įdiegimo su su v3.0_setup.exe ir išdiegimo instrukcija
+ * Įdiegimas:
+   1. Atsisiųskite setup.zip failą;
+   2. Du kartus spustelėkite setup.exe failą, kad pradėtumėte diegimo procesą;
+   3. Atsiradusioje lentelėje spausti "Next", kad tęstumėte diegimą. Paspauskite "Finish", kad užbaigtumėte diegimą;
+   4. Dabar galite paleisti programą pasirinkdami ją iš Start meniu arba darbalaukio.
+ * Išdiegimas (du būdai):
+   1. Atidarius setup.msi failą pasirinkti "Remove";
+   2. Settings -> Apps -> Installed Apps; Surasti v3.0_setup.exe ir pasirinkti "Remove".
+ 
+
 ## Programos versijų aprašymas
+* ### v3.0
+  * Sukurtas programos diegimo failas - ***v3.0_setup.exe***  (1.5 versijos pagrindu), ir jos diegimo instrukcija.
 
 * ### v2.0
   * Sukurta ***projekto dokumentacija*** panaudojant ***Doxygen*** (įkelta kaip atskiras doxygen HTML katalogas į GitHub).
@@ -89,9 +103,8 @@
   * ***Atsitiktinai generuoja*** rezultatus, jei to pageidaujama;
   * Suskaičiuoja galutinį rezultatą pagal formulę: ***galutinis = 0,4 * namų darbų vidurkis arba mediana + 0,6 * egzaminas***.
 
-
 #
-## Programos įdiegimo instrukcija
+## Programos įdiegimo su CMake instrukcija
   1. Pirmiausia reikia ***parsisiųsti CMake programą***, kad būtų galima ***kurti CMakeLists.txt*** failus.
   2. Tuomet reikia ***parsisiųsti "v1.0 (vector)" arba "v1.0 (list)" (arba abi) direktoriją (-as)***.
   3. Taip pat savo kompiuteryje reikia ***įsijungti "Terminal"*** ir pirmiausia ***įvesti kelią iki direktorijos***, kuri buvo parsiųsta: "cd "čia įrašyti kelią iki direktorijos"", tuomet paspausti "Enter" ir ***įvesti "./run.sh"*** (jei nesuveiktų "./run.sh", prieš "./run.sh" reiktų dar suvesti "chmod +x run.sh").
