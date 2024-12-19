@@ -13,7 +13,7 @@
 
 ## Programos versijų aprašymas
 * ### v3.0
-  * Sukurtas programos diegimo failas - ***v3.0_setup.exe***  (1.5 versijos pagrindu), ir jos diegimo instrukcija.
+  * Sukurtas programos diegimo failais - ***v3.0_setup.msi*** ir ***setup.exe*** (1.5 versijos pagrindu), ir jos diegimo instrukcija.
 
 * ### v2.0
   * Sukurta ***projekto dokumentacija*** panaudojant ***Doxygen*** (įkelta kaip atskiras doxygen HTML katalogas į GitHub).
