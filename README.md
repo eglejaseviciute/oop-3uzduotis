@@ -1,6 +1,6 @@
 # Objektinis programavimas (3-oji užduotis)
 
-## Programos įdiegimo su su v3.0_setup.exe ir išdiegimo instrukcija
+## Programos įdiegimo su su setup.exe ir išdiegimo instrukcija
  * ***Įdiegimas:***
    1. Atsisiųskite ***setup.zip*** failą;
    2. Du kartus spustelėkite ***setup.exe*** failą, kad pradėtumėte diegimo procesą;
